@@ -1,45 +1,38 @@
 package moal;
 
 import moal.array.Sorting;
+import moal.generator.Generator;
 import moal.report.Report;
-import moal.util.Generator;
+import moal.task.boxing.Starter;
+import moal.task.boxing.TaskReturnTime;
 
 import java.io.FileNotFoundException;
+import java.util.Objects;
 
 public class Main {
 
     public static void main(String... args) throws FileNotFoundException {
 
         Report report = new Report();
-        long start, end;
-        Integer[] array, arrayForTest;
 
-        String[] rowNames = new String[8];
         int size = 128;
         Double[][] times = new Double[3][8];
 
-        System.out.println("1");
         for (int count = 0; count < 8; count++) {
             size <<= 1;
-            array = Generator.getRandomIntegerArray(size, size);
-            arrayForTest = array.clone();
+            final Integer[] array = Generator.getRandomIntegerArray(size, size);
+            TaskReturnTime bubble = new TaskReturnTime(() -> Sorting.bubble(array.clone(), (x, y) -> (Integer.compare(x, y))));
+            TaskReturnTime insertion = new TaskReturnTime(() -> Sorting.insertion(array.clone(), (x, y) -> (Integer.compare(x, y))));
 
             times[0][count] = (double) size;
 
-            start = System.currentTimeMillis();
-            Sorting.bubble(arrayForTest, (x, y) -> (Integer.compare(x, y)));
-            end = System.currentTimeMillis();
-            times[1][count] = (double) (end - start) / 1000;
+            Long time = Starter.startTask(bubble, 2, null);
+            times[1][count] = Objects.isNull(time) ? -1 : (double) time;
 
-            arrayForTest = array.clone();
-
-            start = System.currentTimeMillis();
-            Sorting.insertion(arrayForTest, (x, y) -> (Integer.compare(x, y)));
-            end = System.currentTimeMillis();
-            times[2][count] = (double) (end - start) / 1000;
+            time = Starter.startTask(insertion, 2, null);
+            times[2][count] = Objects.isNull(time) ? -1 : (double) time;
 
         }
-        System.out.println("1");
 
         report.setRowNames(new String[]{"Count", "Bubble", "Insertion"});
         report.setResults(times);

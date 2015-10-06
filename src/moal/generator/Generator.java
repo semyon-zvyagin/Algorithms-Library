@@ -1,4 +1,4 @@
-package moal.util;
+package moal.generator;
 
 import java.util.Random;
 
