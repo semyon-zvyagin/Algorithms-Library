@@ -2,10 +2,7 @@ package moal.array;
 
 import moal.util.Array;
 
-import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Random;
-import java.util.stream.IntStream;
 
 public class Sorting {
 
@@ -29,17 +26,5 @@ public class Sorting {
                     Array.swap(array, j, j - 1);
             }
         }
-    }
-
-    public static void main(String[] args) {
-        Random random = new Random(System.currentTimeMillis());
-        IntStream source = random.ints(0, 100);
-
-        Integer[] array = source.limit(100).boxed().toArray(Integer[]::new);
-
-        System.out.println(Arrays.toString(array));
-        //insertion(array, (x, y) -> (Integer.compare(x, y)));
-        bubble(array, (x, y) -> (Integer.compare(x, y)));
-        System.out.println(Arrays.toString(array));
     }
 }
