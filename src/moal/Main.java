@@ -16,25 +16,29 @@ public class Main {
         Report report = new Report();
 
         int size = 128;
-        Double[][] times = new Double[3][8];
+        Double[][] times = new Double[4][8];
 
         for (int count = 0; count < 8; count++) {
             size <<= 1;
             final Integer[] array = Generator.getRandomIntegerArray(size, size);
             TaskReturnTime bubble = new TaskReturnTime(() -> Sorting.bubble(array.clone(), (x, y) -> (Integer.compare(x, y))));
             TaskReturnTime insertion = new TaskReturnTime(() -> Sorting.insertion(array.clone(), (x, y) -> (Integer.compare(x, y))));
+            TaskReturnTime merge = new TaskReturnTime(() -> Sorting.merge(array.clone(), (x, y) -> (Integer.compare(x, y)), Integer.MAX_VALUE));
 
             times[0][count] = (double) size;
 
-            Long time = Starter.startTask(bubble, 2, null);
+            Long time = Starter.startTask(bubble, 1, null);
             times[1][count] = Objects.isNull(time) ? -1 : (double) time;
 
-            time = Starter.startTask(insertion, 2, null);
+            time = Starter.startTask(insertion, 1, null);
             times[2][count] = Objects.isNull(time) ? -1 : (double) time;
+
+            time = Starter.startTask(merge, 1, null);
+            times[3][count] = Objects.isNull(time) ? -1 : (double) time;
 
         }
 
-        report.setRowNames(new String[]{"Count", "Bubble", "Insertion"});
+        report.setRowNames(new String[]{"Count", "Bubble", "Insertion", "Merge"});
         report.setResults(times);
         report.printHTML();
     }
