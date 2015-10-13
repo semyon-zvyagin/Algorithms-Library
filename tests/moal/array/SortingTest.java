@@ -32,6 +32,11 @@ public class SortingTest {
     }
 
     @org.junit.Test
+    public void testMergeWithoutInfinity() throws Exception {
+        Sorting.merge(array, comparator);
+    }
+
+    @org.junit.Test
     public void testInsertionBinary() throws Exception {
         Sorting.insertionBinary(array, comparator);
     }

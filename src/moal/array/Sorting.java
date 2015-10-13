@@ -72,8 +72,7 @@ public class Sorting {
         left[sizeLeft] = infinity;
         right[sizeRight] = infinity;
 
-        int i = 0;
-        int j = 0;
+        int i = 0, j = 0;
 
         for (int k = p; k <= r; k++) {
             if (comparator.compare((T) left[i], (T) right[j]) < 1) {
@@ -83,6 +82,59 @@ public class Sorting {
                 array[k] = (T) right[j];
                 j++;
             }
+        }
+    }
+
+    public static <T> void merge(T[] array, Comparator<T> comparator) {
+        merge(array, 0, array.length - 1, comparator);
+    }
+
+    public static <T> void merge(T[] array, int p, int r, Comparator<T> comparator) {
+        if (p < r) {
+            int q = (r + p) >> 1;
+            merge(array, p, q, comparator);
+            merge(array, q + 1, r, comparator);
+            merge(array, p, q, r, comparator);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T> void merge(T[] array, int p, int q, int r, Comparator<T> comparator) {
+        int sizeLeft = q - p + 1;
+        int sizeRight = r - q;
+
+        Object[] left = new Object[sizeLeft];
+        Object[] right = new Object[sizeRight];
+
+        System.arraycopy(array, p, left, 0, sizeLeft);
+        System.arraycopy(array, q + 1, right, 0, sizeRight);
+
+        Object[] atFirst, andThen;
+        if (comparator.compare((T) left[sizeLeft - 1], (T) right[sizeRight - 1]) == -1) {
+            atFirst = left;
+            andThen = right;
+        } else {
+            atFirst = right;
+            andThen = left;
+        }
+
+        int i = 0, j = 0, k = p;
+
+        while (i < atFirst.length) {
+            if (comparator.compare((T) atFirst[i], (T) andThen[j]) < 1) {
+                array[k] = (T) atFirst[i];
+                i++;
+            } else {
+                array[k] = (T) andThen[j];
+                j++;
+            }
+            k++;
+        }
+
+        while (j < andThen.length) {
+            array[k] = (T) andThen[j];
+            j++;
+            k++;
         }
     }
 }

@@ -16,15 +16,16 @@ public class Main {
         Report report = new Report();
 
         int size = 128;
-        Double[][] times = new Double[5][8];
+        Double[][] times = new Double[6][10];
 
-        for (int count = 0; count < 8; count++) {
+        for (int count = 0; count < 10; count++) {
             size <<= 1;
             final Integer[] array = Generator.getRandomIntegerArray(size, size);
             TaskReturnTime bubble = new TaskReturnTime(() -> Sorting.bubble(array.clone(), (x, y) -> (Integer.compare(x, y))));
             TaskReturnTime insertion = new TaskReturnTime(() -> Sorting.insertion(array.clone(), (x, y) -> (Integer.compare(x, y))));
             TaskReturnTime insertionBinary = new TaskReturnTime(() -> Sorting.insertionBinary(array.clone(), (x, y) -> (Integer.compare(x, y))));
             TaskReturnTime merge = new TaskReturnTime(() -> Sorting.merge(array.clone(), (x, y) -> (Integer.compare(x, y)), Integer.MAX_VALUE));
+            TaskReturnTime mergeWithoutInfinity = new TaskReturnTime(() -> Sorting.merge(array.clone(), (x, y) -> (Integer.compare(x, y))));
 
             times[0][count] = (double) size;
 
@@ -40,9 +41,12 @@ public class Main {
             time = Starter.startTask(merge, 1, null);
             times[4][count] = Objects.isNull(time) ? -1 : (double) time;
 
+            time = Starter.startTask(mergeWithoutInfinity, 1, null);
+            times[5][count] = Objects.isNull(time) ? -1 : (double) time;
+
         }
 
-        report.setRowNames(new String[]{"Count", "Bubble", "Insertion", "InsertionBinary", "Merge"});
+        report.setRowNames(new String[]{"Count", "Bubble", "Insertion", "InsertionBinary", "Merge", "Merge without Infinity"});
         report.setResults(times);
         report.printHTML();
     }
