@@ -2,12 +2,13 @@ package moal.array;
 
 import moal.util.Array;
 
+import java.util.Arrays;
 import java.util.Comparator;
 
 public class Sorting {
 
     public static <T> void insertion(T[] array, Comparator<T> comparator) {
-        for (int j = 0; j < array.length; j++) {
+        for (int j = 1; j < array.length; j++) {
             T key = array[j];
             int i = j - 1;
 
@@ -16,6 +17,22 @@ public class Sorting {
                 i = i - 1;
             }
             array[i + 1] = key;
+        }
+    }
+
+    public static <T> void insertionBinary(T[] array, Comparator<T> comparator) {
+        for (int j = 1; j < array.length; j++) {
+            T key = array[j];
+
+            int place = Arrays.binarySearch(array, 0, j, key, comparator);
+            if (place < 0) {
+                place = -(place + 1);
+            } else {
+                place++;
+            }
+
+            System.arraycopy(array, place, array, place + 1, j - place);
+            array[place] = key;
         }
     }
 
