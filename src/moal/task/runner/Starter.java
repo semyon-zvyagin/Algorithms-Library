@@ -1,4 +1,4 @@
-package moal.task.boxing;
+package moal.task.runner;
 
 import java.util.concurrent.*;
 
@@ -11,6 +11,23 @@ public class Starter {
 
         try {
             result = future.get(timeBeforeInterrupted, TimeUnit.SECONDS);
+        } catch (Exception e) {
+            result = returnIfInterrupted;
+        }
+
+        future.cancel(true);
+        executor.shutdownNow();
+
+        return result;
+    }
+
+    public static <T> T startTask(Callable<T> task, T returnIfInterrupted) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Future<T> future = executor.submit(task);
+        T result;
+
+        try {
+            result = future.get();
         } catch (Exception e) {
             result = returnIfInterrupted;
         }

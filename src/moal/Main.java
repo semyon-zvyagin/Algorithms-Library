@@ -1,52 +1,70 @@
 package moal;
 
 import moal.array.Sorting;
-import moal.generator.Generator;
 import moal.report.Report;
-import moal.task.boxing.Starter;
-import moal.task.boxing.TaskReturnTime;
+import moal.task.IntegerArrayTask;
+import moal.task.runner.PerformEngine;
 
 import java.io.FileNotFoundException;
-import java.util.Objects;
+import java.util.LinkedList;
+import java.util.Map;
 
 public class Main {
 
     public static void main(String... args) throws FileNotFoundException {
 
         Report report = new Report();
+        PerformEngine engine = new PerformEngine(128, x -> (x << 1), 5, 1000);
 
-        int size = 128;
-        Double[][] times = new Double[6][10];
+        engine.addTask("Bubble", new IntegerArrayTask() {
+            @Override
+            public void calculate() {
+                Sorting.bubble(array, (x, y) -> (Integer.compare(x, y)));
+            }
+        });
 
-        for (int count = 0; count < 10; count++) {
-            size <<= 1;
-            final Integer[] array = Generator.getRandomIntegerArray(size, size);
-            TaskReturnTime bubble = new TaskReturnTime(() -> Sorting.bubble(array.clone(), (x, y) -> (Integer.compare(x, y))));
-            TaskReturnTime insertion = new TaskReturnTime(() -> Sorting.insertion(array.clone(), (x, y) -> (Integer.compare(x, y))));
-            TaskReturnTime insertionBinary = new TaskReturnTime(() -> Sorting.insertionBinary(array.clone(), (x, y) -> (Integer.compare(x, y))));
-            TaskReturnTime merge = new TaskReturnTime(() -> Sorting.merge(array.clone(), (x, y) -> (Integer.compare(x, y)), Integer.MAX_VALUE));
-            TaskReturnTime mergeWithoutInfinity = new TaskReturnTime(() -> Sorting.merge(array.clone(), (x, y) -> (Integer.compare(x, y))));
+        engine.addTask("Insertion", new IntegerArrayTask() {
+            @Override
+            public void calculate() {
+                Sorting.insertion(array, (x, y) -> (Integer.compare(x, y)));
+            }
+        });
 
-            times[0][count] = (double) size;
+        engine.addTask("InsertionBinary", new IntegerArrayTask() {
+            @Override
+            public void calculate() {
+                Sorting.insertionBinary(array, (x, y) -> (Integer.compare(x, y)));
+            }
+        });
 
-            Long time = Starter.startTask(bubble, 1, null);
-            times[1][count] = Objects.isNull(time) ? -1 : (double) time;
+        engine.addTask("Merge", new IntegerArrayTask() {
+            @Override
+            public void calculate() {
+                Sorting.merge(array, (x, y) -> (Integer.compare(x, y)), Integer.MAX_VALUE);
+            }
+        });
 
-            time = Starter.startTask(insertion, 1, null);
-            times[2][count] = Objects.isNull(time) ? -1 : (double) time;
+        engine.addTask("Merge without Infinity", new IntegerArrayTask() {
+            @Override
+            public void calculate() {
+                Sorting.merge(array, (x, y) -> (Integer.compare(x, y)));
+            }
+        });
 
-            time = Starter.startTask(insertionBinary, 1, null);
-            times[3][count] = Objects.isNull(time) ? -1 : (double) time;
+        engine.startPerform();
 
-            time = Starter.startTask(merge, 1, null);
-            times[4][count] = Objects.isNull(time) ? -1 : (double) time;
+        Map<String, LinkedList<Long>> result = engine.getResult();
+        String[] names = result.keySet().toArray(new String[result.size()]);
+        Double[][] times = new Double[result.size()][];
 
-            time = Starter.startTask(mergeWithoutInfinity, 1, null);
-            times[5][count] = Objects.isNull(time) ? -1 : (double) time;
-
+        int i = 0;
+        for (String name : names) {
+            LinkedList<Long> measurements = result.get(name);
+            times[i] = measurements.stream().map(x -> (x.doubleValue() / 1000)).toArray(Double[]::new);
+            i++;
         }
 
-        report.setRowNames(new String[]{"Count", "Bubble", "Insertion", "InsertionBinary", "Merge", "Merge without Infinity"});
+        report.setRowNames(names);
         report.setResults(times);
         report.printHTML();
     }
