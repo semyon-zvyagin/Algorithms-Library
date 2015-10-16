@@ -119,20 +119,13 @@ public class Sorting {
     }
 
     private static <T> void mergeWithInsertion(T[] array, int p, int r, Comparator<T> comparator, int k) {
-        if (p < r) {
+        if (r - p + 1 > k) {
             int q = (r + p) >> 1;
-
-            if (q - p + 1 > k)
-                merge(array, p, q, comparator);
-            else
-                insertionBinary(array, comparator, p, q);
-
-            if (r - q > k)
-                merge(array, q + 1, r, comparator);
-            else
-                insertionBinary(array, comparator, q + 1, r);
-
+            merge(array, p, q, comparator);
+            merge(array, q + 1, r, comparator);
             merge(array, p, q, r, comparator);
+        } else {
+            insertionBinary(array, comparator, p, r);
         }
     }
 

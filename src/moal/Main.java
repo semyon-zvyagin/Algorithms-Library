@@ -51,10 +51,11 @@ public class Main {
             }
         });
 
-        engine.addTask(String.format("Merge without Infinity with Insertion while n < %d", 16), new IntegerArrayTask() {
+        final int k = 400;
+        engine.addTask(String.format("Merge without Infinity with Insertion while n < %d", k), new IntegerArrayTask() {
             @Override
             public void calculate() {
-                Sorting.mergeWithInsertion(array, (x, y) -> (Integer.compare(x, y)), 16);
+                Sorting.mergeWithInsertion(array, (x, y) -> (Integer.compare(x, y)), k);
             }
         });
 
