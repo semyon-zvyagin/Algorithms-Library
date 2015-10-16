@@ -36,6 +36,22 @@ public class Sorting {
         }
     }
 
+    private static <T> void insertionBinary(T[] array, Comparator<T> comparator, int from, int to) {
+        for (int j = from + 1; j <= to; j++) {
+            T key = array[j];
+
+            int place = Arrays.binarySearch(array, from, j, key, comparator);
+            if (place < 0) {
+                place = -(place + 1);
+            } else {
+                place++;
+            }
+
+            System.arraycopy(array, place, array, place + 1, j - place);
+            array[place] = key;
+        }
+    }
+
     public static <T> void bubble(T[] array, Comparator<T> comparator) {
         for (int i = 0; i < array.length; i++) {
             for (int j = array.length - 1; j > i; j--) {
@@ -49,7 +65,7 @@ public class Sorting {
         merge(array, 0, array.length - 1, comparator, infinity);
     }
 
-    public static <T> void merge(T[] array, int p, int r, Comparator<T> comparator, T infinity) {
+    private static <T> void merge(T[] array, int p, int r, Comparator<T> comparator, T infinity) {
         if (p < r) {
             int q = (r + p) >> 1;
             merge(array, p, q, comparator, infinity);
@@ -89,11 +105,33 @@ public class Sorting {
         merge(array, 0, array.length - 1, comparator);
     }
 
-    public static <T> void merge(T[] array, int p, int r, Comparator<T> comparator) {
+    private static <T> void merge(T[] array, int p, int r, Comparator<T> comparator) {
         if (p < r) {
             int q = (r + p) >> 1;
             merge(array, p, q, comparator);
             merge(array, q + 1, r, comparator);
+            merge(array, p, q, r, comparator);
+        }
+    }
+
+    public static <T> void mergeWithInsertion(T[] array, Comparator<T> comparator, int k) {
+        mergeWithInsertion(array, 0, array.length - 1, comparator, k);
+    }
+
+    private static <T> void mergeWithInsertion(T[] array, int p, int r, Comparator<T> comparator, int k) {
+        if (p < r) {
+            int q = (r + p) >> 1;
+
+            if (q - p + 1 > k)
+                merge(array, p, q, comparator);
+            else
+                insertionBinary(array, comparator, p, q);
+
+            if (r - q > k)
+                merge(array, q + 1, r, comparator);
+            else
+                insertionBinary(array, comparator, q + 1, r);
+
             merge(array, p, q, r, comparator);
         }
     }

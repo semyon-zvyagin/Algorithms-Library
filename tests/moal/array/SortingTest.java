@@ -1,6 +1,7 @@
 package moal.array;
 
 import moal.generator.Generator;
+import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -39,5 +40,10 @@ public class SortingTest {
     @org.junit.Test
     public void testInsertionBinary() throws Exception {
         Sorting.insertionBinary(array, comparator);
+    }
+
+    @Test
+    public void testMergeWithInsertion() throws Exception {
+        Sorting.mergeWithInsertion(array, comparator, 2);
     }
 }

@@ -14,7 +14,7 @@ public class Main {
     public static void main(String... args) throws FileNotFoundException {
 
         Report report = new Report();
-        PerformEngine engine = new PerformEngine(128, x -> (x << 1), 5, 1000);
+        PerformEngine engine = new PerformEngine(100, x -> (x << 1), 5, 100);
 
         engine.addTask("Bubble", new IntegerArrayTask() {
             @Override
@@ -48,6 +48,13 @@ public class Main {
             @Override
             public void calculate() {
                 Sorting.merge(array, (x, y) -> (Integer.compare(x, y)));
+            }
+        });
+
+        engine.addTask(String.format("Merge without Infinity with Insertion while n < %d", 16), new IntegerArrayTask() {
+            @Override
+            public void calculate() {
+                Sorting.mergeWithInsertion(array, (x, y) -> (Integer.compare(x, y)), 16);
             }
         });
 

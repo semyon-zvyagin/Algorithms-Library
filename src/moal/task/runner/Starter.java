@@ -10,7 +10,7 @@ public class Starter {
         T result;
 
         try {
-            result = future.get(timeBeforeInterrupted, TimeUnit.SECONDS);
+            result = future.get(timeBeforeInterrupted, TimeUnit.MILLISECONDS);
         } catch (Exception e) {
             result = returnIfInterrupted;
         }
