@@ -5,8 +5,19 @@ import moal.util.Array;
 import java.util.Arrays;
 import java.util.Comparator;
 
+/**
+ * Class with static methods for sorting array
+ */
 public class Sorting {
 
+    /**
+     * Sorting array with Insertion
+     * Complexity O(n^2), compare count O(n^2)
+     *
+     * @param array      for sorting
+     * @param comparator for comparing types
+     * @param <T>        type for array and comparator
+     */
     public static <T> void insertion(T[] array, Comparator<T> comparator) {
         for (int j = 1; j < array.length; j++) {
             T key = array[j];
@@ -20,6 +31,14 @@ public class Sorting {
         }
     }
 
+    /**
+     * Sorting array with Insertion method, but for search in sorted array
+     * use Binary Search Algorithm
+     * Complexity O(n^2), but compare count O(n * log(n))
+     * @param array for sorting
+     * @param comparator for comparing types
+     * @param <T> type for array and comparator
+     */
     public static <T> void insertionBinary(T[] array, Comparator<T> comparator) {
         for (int j = 1; j < array.length; j++) {
             T key = array[j];
@@ -36,6 +55,16 @@ public class Sorting {
         }
     }
 
+    /**
+     * Sorting array with Insertion method, but for search in sorted array
+     * use Binary Search Algorithm
+     * Complexity O(n^2), but compare count O(n * log(n))
+     * @param array for sorting
+     * @param comparator for comparing types
+     * @param from index (include) will sort
+     * @param to index (include) will sort
+     * @param <T> type for array and comparator
+     */
     private static <T> void insertionBinary(T[] array, Comparator<T> comparator, int from, int to) {
         for (int j = from + 1; j <= to; j++) {
             T key = array[j];
@@ -52,6 +81,13 @@ public class Sorting {
         }
     }
 
+    /**
+     * Sorting array with Bubble method
+     * Complexity O(n^2)
+     * @param array for sorting
+     * @param comparator for comparing types
+     * @param <T> type for array and comparator
+     */
     public static <T> void bubble(T[] array, Comparator<T> comparator) {
         for (int i = 0; i < array.length; i++) {
             for (int j = array.length - 1; j > i; j--) {
@@ -61,10 +97,29 @@ public class Sorting {
         }
     }
 
+    /**
+     * Sorting array with Merge method
+     * Complexity O(n * log(n))
+     * @param array for sorting
+     * @param comparator for comparing types
+     * @param infinity elements, that comparator(infinity,T) always equals 1
+     * @param <T> type for array and comparator
+     */
     public static <T> void merge(T[] array, Comparator<T> comparator, T infinity) {
         merge(array, 0, array.length - 1, comparator, infinity);
     }
 
+    /**
+     * Recursive method that first call himself for two parts for array
+     * and after that merge them saved order
+     * Complexity O(n * log(n))
+     * @param array for sorting
+     * @param p index from (inclusive) will sort
+     * @param r index to (inclusive) will sort
+     * @param comparator for comparing types
+     * @param infinity elements, that comparator(infinity,T) always equals 1
+     * @param <T> type for array and comparator
+     */
     private static <T> void merge(T[] array, int p, int r, Comparator<T> comparator, T infinity) {
         if (p < r) {
             int q = (r + p) >> 1;
@@ -74,6 +129,17 @@ public class Sorting {
         }
     }
 
+    /**
+     * Method for merging two ordered array
+     * @param array source for elements
+     * @param p index from (inclusive) start first order array
+     * @param q index to (inclusive) ends first ordered array, and
+     *          also q+1 will start for second ordered array
+     * @param r index to (inclusive) ends second ordered array
+     * @param comparator for comparing types
+     * @param infinity elements, that comparator(infinity,T) always equals 1
+     * @param <T> type for array and comparator
+     */
     @SuppressWarnings("unchecked")
     private static <T> void merge(T[] array, int p, int q, int r, Comparator<T> comparator, T infinity) {
         int sizeLeft = q - p + 1;
@@ -101,10 +167,27 @@ public class Sorting {
         }
     }
 
+    /**
+     * Sorting array with Merge method without using Infinity flags
+     * Complexity O(n * log(n))
+     * @param array for sorting
+     * @param comparator for comparing types
+     * @param <T> type for array and comparator
+     */
     public static <T> void merge(T[] array, Comparator<T> comparator) {
         merge(array, 0, array.length - 1, comparator);
     }
 
+    /**
+     * Recursive method that first call himself for two parts for array
+     * and after that merge them saved order
+     * Complexity O(n * log(n))
+     * @param array for sorting
+     * @param p index from (inclusive) will sort
+     * @param r index to (inclusive) will sort
+     * @param comparator for comparing types
+     * @param <T> type for array and comparator
+     */
     private static <T> void merge(T[] array, int p, int r, Comparator<T> comparator) {
         if (p < r) {
             int q = (r + p) >> 1;
@@ -114,10 +197,30 @@ public class Sorting {
         }
     }
 
+    /**
+     * Sorting array with Merge method without using Infinity flag
+     * Complexity O(n * log(n))
+     * @param array for sorting
+     * @param comparator for comparing types
+     * @param <T> type for array and comparator
+     * @param k count for elements when need use Insertion method
+     */
     public static <T> void mergeWithInsertion(T[] array, Comparator<T> comparator, int k) {
         mergeWithInsertion(array, 0, array.length - 1, comparator, k);
     }
 
+    /**
+     * Recursive method that if array.length will less then k, will used Insertion
+     * method sort or if more then call himself for two parts for array
+     * and after that merge them saved order
+     * Complexity O(n * log(n))
+     * @param array for sorting
+     * @param p index from (inclusive) will sort
+     * @param r index to (inclusive) will sort
+     * @param comparator for comparing types
+     * @param <T> type for array and comparator
+     * @param k count for elements when need use Insertion method
+     */
     private static <T> void mergeWithInsertion(T[] array, int p, int r, Comparator<T> comparator, int k) {
         if (r - p + 1 > k) {
             int q = (r + p) >> 1;
@@ -129,6 +232,16 @@ public class Sorting {
         }
     }
 
+    /**
+     * Method for merging two ordered array
+     * @param array source for elements
+     * @param p index from (inclusive) start first order array
+     * @param q index to (inclusive) ends first ordered array, and
+     *          also q+1 will start for second ordered array
+     * @param r index to (inclusive) ends second ordered array
+     * @param comparator for comparing types
+     * @param <T> type for array and comparator
+     */
     @SuppressWarnings("unchecked")
     private static <T> void merge(T[] array, int p, int q, int r, Comparator<T> comparator) {
         int sizeLeft = q - p + 1;
