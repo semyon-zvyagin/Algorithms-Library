@@ -8,6 +8,11 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.function.IntUnaryOperator;
 
+/**
+ * Engine for testing tasks. First of all, adds tasks and
+ * their names, after that start to perform, and result
+ * it is time and complexity of task
+ */
 public class PerformEngine {
 
     private final int initialComplexity;
@@ -17,6 +22,14 @@ public class PerformEngine {
     private final Map<String, Task> tasks = new LinkedHashMap<>();
     private final Map<String, LinkedList<Long>> results = new LinkedHashMap<>();
 
+    /**
+     * First time conditions for  initialize
+     *
+     * @param initialComplexity           for first test
+     * @param functionToUpComplexity      for up complexity
+     * @param repeatCountCalculation      for times to do the task
+     * @param borderLineOfCalculationTime border, witch task can process
+     */
     public PerformEngine(int initialComplexity, IntUnaryOperator functionToUpComplexity, int repeatCountCalculation, long borderLineOfCalculationTime) {
         this.initialComplexity = initialComplexity;
         this.repeatCountCalculation = repeatCountCalculation;
@@ -24,10 +37,18 @@ public class PerformEngine {
         this.functionToUpComplexity = functionToUpComplexity;
     }
 
+    /**
+     * Just add one more task
+     * @param name of task
+     * @param task for calculation
+     */
     public void addTask(String name, Task task) {
         tasks.put(name, task);
     }
 
+    /**
+     * Start perform machine, fill results
+     */
     public void startPerform() {
         results.clear();
 
@@ -52,6 +73,9 @@ public class PerformEngine {
         }
     }
 
+    /**
+     * @return results after testing
+     */
     public Map<String, LinkedList<Long>> getResult() {
         return results;
     }
