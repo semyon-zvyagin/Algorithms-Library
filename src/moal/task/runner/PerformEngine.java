@@ -1,7 +1,7 @@
 package moal.task.runner;
 
-import moal.task.Task;
-import moal.task.boxing.TaskReturnTime;
+import moal.task.TestingAlgorithmCase;
+import moal.task.exception.NoneSuitableSolutionException;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -19,7 +19,7 @@ public class PerformEngine {
     private final int repeatCountCalculation;
     private final long borderLineOfCalculationTime;
     private final IntUnaryOperator functionToUpComplexity;
-    private final Map<String, Task> tasks = new LinkedHashMap<>();
+    private final Map<String, TestingAlgorithmCase> tasks = new LinkedHashMap<>();
     private final Map<String, LinkedList<Long>> results = new LinkedHashMap<>();
 
     /**
@@ -42,28 +42,28 @@ public class PerformEngine {
      * @param name of task
      * @param task for calculation
      */
-    public void addTask(String name, Task task) {
+    public void addTask(String name, TestingAlgorithmCase task) {
         tasks.put(name, task);
     }
 
     /**
      * Start perform machine, fill results
      */
-    public void startPerform() {
+    public void startPerform() throws NoneSuitableSolutionException {
         results.clear();
 
         for (String name : tasks.keySet()) {
             int complexity = initialComplexity;
-            final Task task = tasks.get(name);
+            final TestingAlgorithmCase task = tasks.get(name);
             final LinkedList<Long> measurements = new LinkedList<>();
 
             results.put(name, measurements);
             Long averageTime;
             do {
                 Long time = 0L;
+
                 for (int i = 0; i < repeatCountCalculation; i++) {
-                    task.prepare(complexity);
-                    time += Starter.startTask(new TaskReturnTime(task::calculate), null);
+                    time += task.perform(complexity);
                 }
 
                 averageTime = time / repeatCountCalculation;
