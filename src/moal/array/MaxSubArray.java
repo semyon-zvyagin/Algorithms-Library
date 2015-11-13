@@ -27,6 +27,25 @@ public class MaxSubArray {
         return (max.equals(infinity) ? Optional.empty() : Optional.of(Answer.of(max, head, tail)));
     }
 
+    static public <T> Optional<Answer<T>> differenceMethod(T[] differenceArray, BinaryOperator<T> addition, Comparator<T> comparator, T infinity, T zero) {
+        T max = infinity;
+        int head = -1, tail = -1;
+
+        for (int i = 0; i < differenceArray.length; i++) {
+            T sum = zero;
+            for (int j = i; j < differenceArray.length; j++) {
+                sum = addition.apply(sum, differenceArray[j]);
+                if (comparator.compare(sum, max) == 1) {
+                    max = sum;
+                    head = i;
+                    tail = j;
+                }
+            }
+        }
+
+        return (max.equals(infinity) ? Optional.empty() : Optional.of(Answer.of(max, head, tail)));
+    }
+
     static public class Answer<T> {
 
         private T max;

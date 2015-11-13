@@ -1,6 +1,6 @@
 package moal.array;
 
-import moal.util.Array;
+import moal.util.ArrayUtils;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -92,7 +92,7 @@ public class Sorting {
         for (int i = 0; i < array.length; i++) {
             for (int j = array.length - 1; j > i; j--) {
                 if (comparator.compare(array[j], array[j - 1]) == -1)
-                    Array.swap(array, j, j - 1);
+                    ArrayUtils.swap(array, j, j - 1);
             }
         }
     }
