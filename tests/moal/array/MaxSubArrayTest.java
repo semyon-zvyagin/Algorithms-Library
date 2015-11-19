@@ -9,7 +9,7 @@ import java.util.Comparator;
 import java.util.Optional;
 import java.util.function.BinaryOperator;
 
-public class MaxSubArrayUtilsTest {
+public class MaxSubArrayTest {
 
     Integer[] array;
     Integer[] differenceArray;
