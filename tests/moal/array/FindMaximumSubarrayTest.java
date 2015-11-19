@@ -9,12 +9,12 @@ import java.util.Comparator;
 import java.util.Optional;
 import java.util.function.BinaryOperator;
 
-public class MaxSubArrayTest {
+public class FindMaximumSubarrayTest {
 
     Integer[] array;
     Integer[] differenceArray;
     Class<Integer> type = Integer.class;
-    Optional<MaxSubArray.Answer<Integer>> answer;
+    Optional<FindMaximumSubarray.Answer<Integer>> answer;
     Comparator<Integer> comparator = Integer::compare;
     BinaryOperator<Integer> addition = (a, b) -> (a + b);
     BinaryOperator<Integer> subtraction = (a, b) -> (b - a);
@@ -35,11 +35,16 @@ public class MaxSubArrayTest {
 
     @Test
     public void testBruteForce() throws Exception {
-        answer = MaxSubArray.bruteForce(array, subtraction, comparator, infinity);
+        answer = FindMaximumSubarray.bruteForce(array, subtraction, comparator, infinity);
     }
 
     @Test
     public void testDifferenceMethod() throws Exception {
-        answer = MaxSubArray.differenceMethod(differenceArray, addition, comparator, infinity, zero);
+        answer = FindMaximumSubarray.differenceMethod(differenceArray, addition, comparator, infinity, zero);
+    }
+
+    @Test
+    public void testDivideAndRule() throws Exception {
+        answer = FindMaximumSubarray.divideAndRule(differenceArray, addition, comparator, infinity, zero);
     }
 }
