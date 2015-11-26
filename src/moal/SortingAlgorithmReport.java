@@ -2,12 +2,14 @@ package moal;
 
 import moal.array.Sorting;
 import moal.generator.Generator;
-import moal.report.Report;
+import moal.report.ReportHTML;
+import moal.report.element.TableHTML;
+import moal.report.element.TextHTML;
 import moal.task.TestingAlgorithmCase;
+import moal.task.boxing.TaskReturnTime;
 import moal.task.exception.NoneSuitableSolutionException;
 import moal.task.runner.PerformEngine;
 
-import java.io.FileNotFoundException;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.Map;
@@ -16,9 +18,11 @@ public class SortingAlgorithmReport {
 
     static final Comparator<Integer> comparator = (x, y) -> (Integer.compare(x, y));
 
-    public static void main(String... args) throws FileNotFoundException, NoneSuitableSolutionException {
+    public static void main(String... args) throws Exception {
 
-        Report report = new Report();
+        ReportHTML report = new ReportHTML("Sorting Methods");
+        report.addElement(new TextHTML("Sorting Methods", TextHTML.TextSize.LARGE));
+
         PerformEngine engine = new PerformEngine(100, x -> (x << 1), 5, 100);
 
         engine.addTask("Bubble", new SortingAlgorithmCase() {
@@ -64,22 +68,29 @@ public class SortingAlgorithmReport {
             }
         });
 
-        engine.startPerform();
+        TaskReturnTime startEngine = new TaskReturnTime(() -> {
+            try {
+                engine.startPerform();
+            } catch (NoneSuitableSolutionException e) {
+                e.printStackTrace();
+            }
+        });
 
+        long time = startEngine.call();
         Map<String, LinkedList<Long>> result = engine.getResult();
-        String[] names = result.keySet().toArray(new String[result.size()]);
-        Double[][] times = new Double[result.size()][];
+        String[] algorithms = result.keySet().toArray(new String[result.size()]);
 
-        int i = 0;
-        for (String name : names) {
+        TableHTML table = new TableHTML();
+
+        for (String name : algorithms) {
             LinkedList<Long> measurements = result.get(name);
-            times[i] = measurements.stream().map(x -> (x.doubleValue() / 1000)).toArray(Double[]::new);
-            i++;
+            table.addString(measurements.stream().map(x -> (x.doubleValue() / 1000)).toArray(Double[]::new));
         }
+        table.addColumn(algorithms);
 
-        report.setRowNames(names);
-        report.setResults(times);
-        report.printHTML();
+        report.addElement(table);
+        report.addElement(new TextHTML(String.format("Compute for %f s.", (double) time / 1000), TextHTML.TextSize.SMALL));
+        report.writeFile();
     }
 
     private static abstract class SortingAlgorithmCase extends TestingAlgorithmCase {

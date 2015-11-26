@@ -1,6 +1,10 @@
 package moal.util;
 
 import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.function.BinaryOperator;
 
 /**
@@ -39,6 +43,32 @@ public class ArrayUtils {
         for (int i = 0; i < resultArrayLength; i++) {
             result[i] = subtraction.apply(array[i], array[i + 1]);
         }
+
+        return result;
+    }
+
+    /**
+     * Create String array with same length as input array, where elements
+     * represented as a string representation of input array
+     *
+     * @param array input elements
+     * @return String array
+     */
+    public static String[] convertToStringArray(Object[] array) {
+        return Arrays.stream(array).map(Object::toString).toArray(String[]::new);
+    }
+
+    /**
+     * Create LinkedList with elements of input array
+     *
+     * @param array input elements
+     * @param <T>   type of input array and output LinkedList
+     * @return LinkedList
+     */
+    public static <T> List<T> convertToLinkedList(T[] array) {
+        List<T> result = new LinkedList<>();
+
+        Collections.addAll(result, array);
 
         return result;
     }
