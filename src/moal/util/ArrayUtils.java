@@ -4,7 +4,6 @@ import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.function.BinaryOperator;
 
 /**
@@ -61,15 +60,13 @@ public class ArrayUtils {
     /**
      * Create LinkedList with elements of input array
      *
-     * @param array input elements
      * @param <T>   type of input array and output LinkedList
+     * @param array input elements
      * @return LinkedList
      */
-    public static <T> List<T> convertToLinkedList(T[] array) {
-        List<T> result = new LinkedList<>();
-
+    public static <T> LinkedList<T> convertToLinkedList(T[] array) {
+        LinkedList<T> result = new LinkedList<>();
         Collections.addAll(result, array);
-
         return result;
     }
 }
