@@ -7,7 +7,7 @@ import java.util.List;
 
 public class TableHTML implements ElementHTML {
 
-    private List<List<String>> table = new LinkedList<>();
+    private List<LinkedList<String>> table = new LinkedList<>();
 
     public TableHTML addString(Object[] newString) {
         return addString(ArrayUtils.convertToStringArray(newString));
@@ -28,7 +28,23 @@ public class TableHTML implements ElementHTML {
         }
 
         for (int i = 0; i < newColumn.length; i++) {
-            table.get(i).add(newColumn[i]);
+            table.get(i).addLast(newColumn[i]);
+        }
+
+        return this;
+    }
+
+    public TableHTML addColumnToBeginning(Object[] newColumn) {
+        return addColumnToBeginning(ArrayUtils.convertToStringArray(newColumn));
+    }
+
+    public TableHTML addColumnToBeginning(String[] newColumn) {
+        for (int i = newColumn.length; i > table.size(); i--) {
+            table.add(new LinkedList<>());
+        }
+
+        for (int i = 0; i < newColumn.length; i++) {
+            table.get(i).addFirst(newColumn[i]);
         }
 
         return this;
