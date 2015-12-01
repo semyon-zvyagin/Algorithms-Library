@@ -10,6 +10,17 @@ public class Generator {
     private static Random random = new Random(System.currentTimeMillis());
 
     /**
+     * Generate random integer between two numbers.
+     *
+     * @param leftInclusive  in range (must be less rightExclusive)
+     * @param rightExclusive in range
+     * @return random integer in the range [leftInclusive .. rightExclusive)
+     */
+    public static Integer getRandomInteger(int leftInclusive, int rightExclusive) {
+        return leftInclusive + random.nextInt(rightExclusive - leftInclusive);
+    }
+
+    /**
      * Generate random integer array.
      *
      * @param count     length of returned array
