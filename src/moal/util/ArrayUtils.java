@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.function.BinaryOperator;
 
 /**
- * Static utils for ArrayUtils
+ * Static utils for Array
  */
 public class ArrayUtils {
 
