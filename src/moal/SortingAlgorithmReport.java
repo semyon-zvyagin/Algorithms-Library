@@ -86,7 +86,7 @@ public class SortingAlgorithmReport {
             LinkedList<Long> measurements = result.get(name);
             table.addString(measurements.stream().map(x -> (x.doubleValue() / 1000)).toArray(Double[]::new));
         }
-        table.addColumn(algorithms);
+        table.addColumnToBeginning(algorithms);
 
         report.addElement(table);
         report.addElement(new TextHTML(String.format("Compute for %f s.", (double) time / 1000), TextHTML.TextSize.SMALL));
