@@ -22,23 +22,14 @@ public class TextHTML implements ElementHTML {
     public enum TextSize {
         SMALL, MEDIUM, LARGE;
 
-        public static String getDefaultStyles() {
-
-            return "<style>\n" +
-                    "    h1 { font-size: small }\n" +
-                    "    h2 { font-size: medium }\n" +
-                    "    h3 { font-size: large }\n" +
-                    "</style>\n";
-        }
-
         String getOpenTag() {
             switch (this) {
                 case SMALL:
-                    return "<h1>";
+                    return "<h3>";
                 case MEDIUM:
                     return "<h2>";
                 case LARGE:
-                    return "<h3>";
+                    return "<h1>";
             }
             return "";
         }
@@ -46,11 +37,11 @@ public class TextHTML implements ElementHTML {
         String getCloseTag() {
             switch (this) {
                 case SMALL:
-                    return "</h1>";
+                    return "</h3>";
                 case MEDIUM:
                     return "</h2>";
                 case LARGE:
-                    return "</h3>";
+                    return "</h1>";
             }
             return "";
         }

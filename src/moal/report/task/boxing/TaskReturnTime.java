@@ -1,4 +1,4 @@
-package moal.task.boxing;
+package moal.report.task.boxing;
 
 import java.util.concurrent.Callable;
 

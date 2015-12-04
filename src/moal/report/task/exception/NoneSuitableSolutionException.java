@@ -1,4 +1,4 @@
-package moal.task.exception;
+package moal.report.task.exception;
 
 /**
  * It throw when produced solution after computing is

@@ -1,4 +1,4 @@
-package moal.task.runner;
+package moal.report.task.runner;
 
 import java.util.concurrent.*;
 

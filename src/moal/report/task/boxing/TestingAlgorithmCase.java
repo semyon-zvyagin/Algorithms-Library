@@ -1,11 +1,20 @@
-package moal.task;
-
-import moal.task.exception.NoneSuitableSolutionException;
+package moal.report.task.boxing;
 
 /**
  * This abstract class just a wrapper for testing Algorithm
  */
 public abstract class TestingAlgorithmCase {
+
+    private String name;
+
+    public TestingAlgorithmCase(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
     /**
      * Prepare test case for computing. Method must refresh task
      * based on complexity parameter. It is necessary to be able
@@ -40,10 +49,8 @@ public abstract class TestingAlgorithmCase {
      *
      * @param complexity use for {@link #prepare(int)} method
      * @return what time did {@link #compute()} method perform
-     * @throws NoneSuitableSolutionException if {@link #isSuitableSolution()}
-     *                                       returned <tt>false</tt>
      */
-    public long perform(int complexity) throws NoneSuitableSolutionException {
+    public long perform(int complexity) {
         prepare(complexity);
         long start = System.currentTimeMillis();
         compute();
@@ -52,7 +59,7 @@ public abstract class TestingAlgorithmCase {
         if (isSuitableSolution()) {
             return end - start;
         } else {
-            throw new NoneSuitableSolutionException(String.format("complexity - %d, time - %d", complexity, end - start));
+            return -1;
         }
     }
 }

@@ -1,11 +1,8 @@
-package moal.task.runner;
+package moal.report.task.runner.engine;
 
-import moal.task.TestingAlgorithmCase;
-import moal.task.exception.NoneSuitableSolutionException;
+import moal.report.task.boxing.TestingAlgorithmCase;
 
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 import java.util.function.IntUnaryOperator;
 
 /**
@@ -19,8 +16,9 @@ public class PerformEngine {
     private final int repeatCountCalculation;
     private final long borderLineOfCalculationTime;
     private final IntUnaryOperator functionToUpComplexity;
-    private final Map<String, TestingAlgorithmCase> tasks = new LinkedHashMap<>();
+    private final LinkedList<TestingAlgorithmCase> tasks = new LinkedList<>();
     private final Map<String, LinkedList<Long>> results = new LinkedHashMap<>();
+    private final HashSet<Integer> complexities = new HashSet<>();
 
     /**
      * First time conditions for  initialize
@@ -39,25 +37,23 @@ public class PerformEngine {
 
     /**
      * Just add one more task
-     * @param name of task
      * @param task for calculation
      */
-    public void addTask(String name, TestingAlgorithmCase task) {
-        tasks.put(name, task);
+    public void addTask(TestingAlgorithmCase task) {
+        tasks.add(task);
     }
 
     /**
      * Start perform machine, fill results
      */
-    public void startPerform() throws NoneSuitableSolutionException {
+    public void startPerform() {
         results.clear();
 
-        for (String name : tasks.keySet()) {
+        for (TestingAlgorithmCase task : tasks) {
             int complexity = initialComplexity;
-            final TestingAlgorithmCase task = tasks.get(name);
             final LinkedList<Long> measurements = new LinkedList<>();
 
-            results.put(name, measurements);
+            results.put(task.getName(), measurements);
             Long averageTime;
             do {
                 Long time = 0L;
@@ -68,6 +64,7 @@ public class PerformEngine {
 
                 averageTime = time / repeatCountCalculation;
                 measurements.add(averageTime);
+                complexities.add(complexity);
                 complexity = functionToUpComplexity.applyAsInt(complexity);
             } while (averageTime < borderLineOfCalculationTime);
         }
@@ -78,5 +75,12 @@ public class PerformEngine {
      */
     public Map<String, LinkedList<Long>> getResult() {
         return results;
+    }
+
+    /**
+     * @return complexities after testing
+     */
+    public Set<Integer> getComplexities() {
+        return complexities;
     }
 }
