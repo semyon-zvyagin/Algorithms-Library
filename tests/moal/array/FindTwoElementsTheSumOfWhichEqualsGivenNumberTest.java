@@ -53,6 +53,6 @@ public class FindTwoElementsTheSumOfWhichEqualsGivenNumberTest {
 
     @Test
     public void testHashSearch() throws Exception {
-        typeAnswer = FindTwoElementsTheSumOfWhichEqualsGivenNumber.hashSearch(array, givenNumber, subtraction, comparator);
+        typeAnswer = FindTwoElementsTheSumOfWhichEqualsGivenNumber.hashSearch(array, givenNumber, subtraction);
     }
 }

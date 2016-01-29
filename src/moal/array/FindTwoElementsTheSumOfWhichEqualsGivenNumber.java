@@ -62,7 +62,7 @@ public class FindTwoElementsTheSumOfWhichEqualsGivenNumber {
         return Optional.empty();
     }
 
-    public static <T> Optional<TypeAnswer> hashSearch(T[] array, T givenNumber, BinaryOperator<T> subtraction, Comparator<T> comparator) {
+    public static <T> Optional<TypeAnswer> hashSearch(T[] array, T givenNumber, BinaryOperator<T> subtraction) {
         Map<T, T> pairs = new HashMap<>();
         for (T element : array) {
             if (pairs.containsKey(element)) {
