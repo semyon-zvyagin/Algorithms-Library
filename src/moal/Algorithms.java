@@ -76,11 +76,11 @@ public class Algorithms {
             }
         };
 
-        static FindMaximumSubArrayAlgorithmCase divideAndRule = new FindMaximumSubArrayAlgorithmCase("Divide And Rule") {
+        static FindMaximumSubArrayAlgorithmCase divideAndConquer = new FindMaximumSubArrayAlgorithmCase("Divide and Conquer") {
             @Override
             protected void compute() {
                 Integer[] differenceArray = ArrayUtils.generateIntervalsArray(array, Integer.class, subtraction);
-                FindMaximumSubarray.divideAndRule(differenceArray, addition, comparator, infinity, zero);
+                FindMaximumSubarray.divideAndConquer(differenceArray, addition, comparator, infinity, zero);
             }
         };
     }

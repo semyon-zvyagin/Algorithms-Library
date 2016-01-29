@@ -72,7 +72,7 @@ public class FindMaximumSubarray {
     }
 
     /**
-     * Divide and Rule method for solve maximal subarray problem, needs difference array
+     * Divide and Conquer method for solve maximal subarray problem, needs difference array
      * look {@link moal.util.ArrayUtils#generateIntervalsArray(Object[], Class, BinaryOperator)}
      * complexity O(n * log(n))
      *
@@ -84,14 +84,14 @@ public class FindMaximumSubarray {
      * @param <T>             type of array elements
      * @return cortege of head, tail and sum maximum subarray
      */
-    static public <T> Optional<Answer<T>> divideAndRule(T[] differenceArray, BinaryOperator<T> addition, Comparator<T> comparator, T infinity, T zero) {
+    static public <T> Optional<Answer<T>> divideAndConquer(T[] differenceArray, BinaryOperator<T> addition, Comparator<T> comparator, T infinity, T zero) {
         return differenceArray.length == 0 ? Optional.empty() :
-                Optional.of(divideAndRule(differenceArray, 0, differenceArray.length - 1, addition, comparator, infinity, zero));
+                Optional.of(divideAndConquer(differenceArray, 0, differenceArray.length - 1, addition, comparator, infinity, zero));
     }
 
     /**
      * Recursive method that is called on two part of array A[low .. high], until
-     * low != high, worked on principle "Divide and Rule", find max parts in left,
+     * low != high, worked on principle "Divide and Conquer", find max parts in left,
      * right and cross arrays, then comparing them and return maximal cortege
      * complexity O(n * log(n)), where
      * O(n) - {@link #findMaxCrossingSubArray(Object[], int, int, int, BinaryOperator, Comparator, Object, Object)}
@@ -107,13 +107,13 @@ public class FindMaximumSubarray {
      * @param <T>             type of array elements
      * @return cortege (sum, head, tail) of maximum subarray in A[low .. high]
      */
-    static private <T> Answer<T> divideAndRule(T[] differenceArray, int low, int high, BinaryOperator<T> addition, Comparator<T> comparator, T infinity, T zero) {
+    static private <T> Answer<T> divideAndConquer(T[] differenceArray, int low, int high, BinaryOperator<T> addition, Comparator<T> comparator, T infinity, T zero) {
         if (low == high) {
             return Answer.of(differenceArray[low], low, high);
         } else {
             int mid = low + (high - low) / 2;
-            Answer<T> leftCortege = divideAndRule(differenceArray, low, mid, addition, comparator, infinity, zero);
-            Answer<T> rightCortege = divideAndRule(differenceArray, mid + 1, high, addition, comparator, infinity, zero);
+            Answer<T> leftCortege = divideAndConquer(differenceArray, low, mid, addition, comparator, infinity, zero);
+            Answer<T> rightCortege = divideAndConquer(differenceArray, mid + 1, high, addition, comparator, infinity, zero);
             Answer<T> crossCortege = findMaxCrossingSubArray(differenceArray, low, mid, high, addition, comparator, infinity, zero);
             if ((comparator.compare(leftCortege.getMax(), rightCortege.getMax()) >= 0) &&
                     (comparator.compare(leftCortege.getMax(), crossCortege.getMax()) >= 0)) {

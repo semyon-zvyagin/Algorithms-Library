@@ -44,7 +44,7 @@ public class FindMaximumSubarrayTest {
     }
 
     @Test
-    public void testDivideAndRule() throws Exception {
-        answer = FindMaximumSubarray.divideAndRule(differenceArray, addition, comparator, infinity, zero);
+    public void testDivideAndConquer() throws Exception {
+        answer = FindMaximumSubarray.divideAndConquer(differenceArray, addition, comparator, infinity, zero);
     }
 }
