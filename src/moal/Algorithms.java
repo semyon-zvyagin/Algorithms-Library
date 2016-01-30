@@ -1,8 +1,10 @@
 package moal;
 
 import moal.array.FindMaximumSubarray;
+import moal.array.FindTwoElementsTheSumOfWhichEqualsGivenNumber;
 import moal.array.Sorting;
 import moal.report.task.boxing.cases.FindMaximumSubArrayAlgorithmCase;
+import moal.report.task.boxing.cases.FindTwoElementsTheSumOfWhichEqualsGivenNumberAlgorithmCase;
 import moal.report.task.boxing.cases.SortingAlgorithmCase;
 import moal.util.ArrayUtils;
 
@@ -14,7 +16,7 @@ public class Algorithms {
     public static class ArraySorting {
 
         final static int k = 400;
-        static final private Comparator<Integer> comparator = (x, y) -> (Integer.compare(x, y));
+        static final private Comparator<Integer> comparator = Integer::compare;
         static final private Integer infinity = Integer.MAX_VALUE;
         static SortingAlgorithmCase bubble = new SortingAlgorithmCase("Bubble") {
             @Override
@@ -55,7 +57,7 @@ public class Algorithms {
     }
 
     public static class ArrayFindMaxSubarray {
-        static final private Comparator<Integer> comparator = (x, y) -> (Integer.compare(x, y));
+        static final private Comparator<Integer> comparator = Integer::compare;
         static final private BinaryOperator<Integer> subtraction = (a, b) -> (a - b);
         static final private BinaryOperator<Integer> addition = (a, b) -> (a + b);
         static final private Integer infinity = Integer.MAX_VALUE;
@@ -83,6 +85,44 @@ public class Algorithms {
                 FindMaximumSubarray.divideAndConquer(differenceArray, addition, comparator, infinity, zero);
             }
         };
+    }
+
+    public static class ArrayFindTwoElementsTheSumOfWhichEqualsGivenNumber {
+        static final private BinaryOperator<Integer> addition = (a, b) -> (a + b);
+        static final private BinaryOperator<Integer> subtraction = (a, b) -> (a - b);
+        static final private Comparator<Integer> comparator = Integer::compare;
+
+        static FindTwoElementsTheSumOfWhichEqualsGivenNumberAlgorithmCase bruteForce =
+                new FindTwoElementsTheSumOfWhichEqualsGivenNumberAlgorithmCase("Brute Force") {
+                    @Override
+                    protected void compute() {
+                        FindTwoElementsTheSumOfWhichEqualsGivenNumber.bruteForce(array, searchingSum, addition);
+                    }
+                };
+
+        static FindTwoElementsTheSumOfWhichEqualsGivenNumberAlgorithmCase sortAndBinarySearch =
+                new FindTwoElementsTheSumOfWhichEqualsGivenNumberAlgorithmCase("Sorting and Binary Search") {
+                    @Override
+                    protected void compute() {
+                        FindTwoElementsTheSumOfWhichEqualsGivenNumber.sortAndBinarySearch(array, searchingSum, subtraction, comparator);
+                    }
+                };
+
+        static FindTwoElementsTheSumOfWhichEqualsGivenNumberAlgorithmCase sortAndBinarySearchIgnoreDuplicates =
+                new FindTwoElementsTheSumOfWhichEqualsGivenNumberAlgorithmCase("Sorting and Binary Search Ignore Duplicates") {
+                    @Override
+                    protected void compute() {
+                        FindTwoElementsTheSumOfWhichEqualsGivenNumber.sortAndBinarySearchIgnoreDuplicates(array, searchingSum, subtraction, comparator);
+                    }
+                };
+
+        static FindTwoElementsTheSumOfWhichEqualsGivenNumberAlgorithmCase hashSearch =
+                new FindTwoElementsTheSumOfWhichEqualsGivenNumberAlgorithmCase("Hash Search") {
+                    @Override
+                    protected void compute() {
+                        FindTwoElementsTheSumOfWhichEqualsGivenNumber.hashSearch(array, searchingSum, subtraction);
+                    }
+                };
     }
 
 }
