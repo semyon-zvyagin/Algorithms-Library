@@ -9,14 +9,14 @@ import java.util.function.BinaryOperator;
 public class FindTwoElementsTheSumOfWhichEqualsGivenNumber {
 
     /**
-     * Find two indexes of elements array the sum of which equals given number
+     * Review all the pairs in the array. When find first one, return it.
      * Complexity = O(n^2)
      *
      * @param array       of elements
-     * @param givenNumber sum of two element
+     * @param givenNumber sum of two elements
      * @param addition    for addition
      * @param <T>         type of array elements
-     * @return Cortege of two elements
+     * @return Cortege of two index of array
      */
     public static <T> Optional<IndexAnswer> bruteForce(T[] array, T givenNumber, BinaryOperator<T> addition) {
         for (int i = 0; i < array.length; i++) {
@@ -29,7 +29,19 @@ public class FindTwoElementsTheSumOfWhichEqualsGivenNumber {
         return Optional.empty();
     }
 
-
+    /**
+     * First, we sort the array and then looping through each element and
+     * trying to find a pair for the remainder of the array using binary
+     * search. When find first one, return it.
+     * Complexity = O(n * log(n))
+     *
+     * @param array       of elements
+     * @param givenNumber sum of two elements
+     * @param subtraction to define search number of pair
+     * @param comparator  for sort method
+     * @param <T>         type of array elements
+     * @return Cortege of two index of array
+     */
     public static <T> Optional<IndexAnswer> sortAndBinarySearch(T[] array, T givenNumber, BinaryOperator<T> subtraction, Comparator<T> comparator) {
         Arrays.sort(array, comparator);
         int length = array.length;
@@ -43,6 +55,19 @@ public class FindTwoElementsTheSumOfWhichEqualsGivenNumber {
         return Optional.empty();
     }
 
+    /**
+     * First, we sort the array and then looping through each element
+     * skipping duplicates and trying to find a pair for the remainder
+     * of the array using binary search. When find first one, return it.
+     * Complexity = O(n * log(n))
+     *
+     * @param array       of elements
+     * @param givenNumber sum of two elements
+     * @param subtraction to define search number of pair
+     * @param comparator  for sort method
+     * @param <T>         type of array elements
+     * @return Cortege of two index of array
+     */
     public static <T> Optional<IndexAnswer> sortAndBinarySearchIgnoreDuplicates(T[] array, T givenNumber, BinaryOperator<T> subtraction, Comparator<T> comparator) {
         Arrays.sort(array, comparator);
         int length = array.length;
@@ -62,6 +87,18 @@ public class FindTwoElementsTheSumOfWhichEqualsGivenNumber {
         return Optional.empty();
     }
 
+    /**
+     * Looping through each element X of array, looking in HashMap
+     * for key X, if find return pair (key, value), if not add
+     * new (key, value) = (givenNumber - X, X).
+     * Complexity = O(n)
+     *
+     * @param array        of elements
+     * @param givenNumber  sum of two elements
+     * @param subtraction  to define key of HashMap element
+     * @param <T>          type of array elements
+     * @return Cortege of two elements of array
+     */
     public static <T> Optional<TypeAnswer> hashSearch(T[] array, T givenNumber, BinaryOperator<T> subtraction) {
         Map<T, T> pairs = new HashMap<>();
         for (T element : array) {
