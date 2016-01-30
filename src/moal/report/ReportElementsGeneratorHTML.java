@@ -16,11 +16,11 @@ import java.util.stream.Stream;
 
 public class ReportElementsGeneratorHTML {
 
-    public static String tablePerformance(String name, int initialComplexity, IntUnaryOperator functionToUpComplexity, int repeatCountCalculation, long borderLineOfCalculationTime, TestingAlgorithmCase... cases) {
+    public static String tablePerformance(String name, int initialComplexity, IntUnaryOperator functionToUpComplexity, int repeatCountCalculation, long borderLineOfCalculationTime, int borderLineOfUpComplexity, TestingAlgorithmCase... cases) {
         LinkedList<ElementHTML> elements = new LinkedList<>();
         elements.add(new TextHTML(name, TextHTML.TextSize.LARGE));
 
-        PerformEngine engine = new PerformEngine(initialComplexity, functionToUpComplexity, repeatCountCalculation, borderLineOfCalculationTime);
+        PerformEngine engine = new PerformEngine(initialComplexity, functionToUpComplexity, repeatCountCalculation, borderLineOfCalculationTime, borderLineOfUpComplexity);
 
         Stream.of(cases).forEachOrdered(engine::addTask);
         long time = Starter.startTask(new TaskReturnTime(engine::startPerform), -1L);
