@@ -15,6 +15,7 @@ public class PerformEngine {
     private final int initialComplexity;
     private final int repeatCountCalculation;
     private final long borderLineOfCalculationTime;
+    private final int borderLineOfUpComplexity;
     private final IntUnaryOperator functionToUpComplexity;
     private final LinkedList<TestingAlgorithmCase> tasks = new LinkedList<>();
     private final Map<String, LinkedList<Long>> results = new LinkedHashMap<>();
@@ -28,11 +29,12 @@ public class PerformEngine {
      * @param repeatCountCalculation      for times to do the task
      * @param borderLineOfCalculationTime border, witch task can process
      */
-    public PerformEngine(int initialComplexity, IntUnaryOperator functionToUpComplexity, int repeatCountCalculation, long borderLineOfCalculationTime) {
+    public PerformEngine(int initialComplexity, IntUnaryOperator functionToUpComplexity, int repeatCountCalculation, long borderLineOfCalculationTime, int borderLineOfUpComplexity) {
         this.initialComplexity = initialComplexity;
         this.repeatCountCalculation = repeatCountCalculation;
         this.borderLineOfCalculationTime = borderLineOfCalculationTime;
         this.functionToUpComplexity = functionToUpComplexity;
+        this.borderLineOfUpComplexity = borderLineOfUpComplexity;
     }
 
     /**
@@ -51,6 +53,7 @@ public class PerformEngine {
 
         for (TestingAlgorithmCase task : tasks) {
             int complexity = initialComplexity;
+            int countOfUpComplexity = 0;
             final LinkedList<Long> measurements = new LinkedList<>();
 
             results.put(task.getName(), measurements);
@@ -66,7 +69,10 @@ public class PerformEngine {
                 measurements.add(averageTime);
                 complexities.add(complexity);
                 complexity = functionToUpComplexity.applyAsInt(complexity);
-            } while (averageTime < borderLineOfCalculationTime);
+                countOfUpComplexity++;
+
+                System.out.println(String.format("Task %s (complexity = %d) done for %d", task.getName(), complexity, averageTime));
+            } while (averageTime < borderLineOfCalculationTime && countOfUpComplexity < borderLineOfUpComplexity);
         }
     }
 
