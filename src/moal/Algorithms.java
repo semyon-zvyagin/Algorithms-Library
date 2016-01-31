@@ -85,6 +85,14 @@ public class Algorithms {
                 FindMaximumSubarray.divideAndConquer(differenceArray, addition, comparator, infinity, zero);
             }
         };
+
+        static FindMaximumSubArrayAlgorithmCase linearJayKadane = new FindMaximumSubArrayAlgorithmCase("Jay Kadane's") {
+            @Override
+            protected void compute() {
+                Integer[] differenceArray = ArrayUtils.generateIntervalsArray(array, Integer.class, subtraction);
+                FindMaximumSubarray.linearJayKadane(differenceArray, addition, comparator, zero);
+            }
+        };
     }
 
     public static class ArrayFindTwoElementsTheSumOfWhichEqualsGivenNumber {

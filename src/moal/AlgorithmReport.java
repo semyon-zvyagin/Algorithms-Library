@@ -50,7 +50,8 @@ public class AlgorithmReport {
         TestingAlgorithmCase[] algorithms = {
                 Algorithms.ArrayFindMaxSubarray.bruteForce,
                 Algorithms.ArrayFindMaxSubarray.difference,
-                Algorithms.ArrayFindMaxSubarray.divideAndConquer
+                Algorithms.ArrayFindMaxSubarray.divideAndConquer,
+                Algorithms.ArrayFindMaxSubarray.linearJayKadane
         };
 
         String html = ReportElementsGeneratorHTML.tablePerformance("Find Maximal Subarray", 100, x -> x << 1, 5, 100, 16, algorithms);
@@ -64,8 +65,8 @@ public class AlgorithmReport {
         File file = new File("Algorithms Report.html");
         Document document = Jsoup.parse(file, "UTF-8");
 
-        refreshArraySorting(document);
-        refreshArrayFindTwoElementsTheSumOfWhichEqualsGivenNumber(document);
+        //refreshArraySorting(document);
+        //refreshArrayFindTwoElementsTheSumOfWhichEqualsGivenNumber(document);
         refreshArrayFindMaxSubarray(document);
 
         try (PrintWriter writer = new PrintWriter(file, "UTF-8")) {

@@ -47,4 +47,9 @@ public class FindMaximumSubarrayTest {
     public void testDivideAndConquer() throws Exception {
         answer = FindMaximumSubarray.divideAndConquer(differenceArray, addition, comparator, infinity, zero);
     }
+
+    @Test
+    public void testLinearJayKadane() throws Exception {
+        answer = FindMaximumSubarray.linearJayKadane(differenceArray, addition, comparator, zero);
+    }
 }

@@ -172,6 +172,50 @@ public class FindMaximumSubarray {
     }
 
     /**
+     * Jay Kadane's algorithm consists of a scan through the array values,
+     * computing at each position the maximum (positive sum) subarray ending
+     * at that position. This subarray is either empty (in which case its sum
+     * is zero) or consists of one more element than the maximum subarray
+     * ending at the previous position.
+     * Complexity = O(n)
+     *
+     * @param differenceArray elements of difference array
+     * @param addition        for addition T elements
+     * @param comparator      for comparing T elements
+     * @param zero            T element, that neutral with respect to addition
+     * @param <T>             type of array elements
+     * @return cortege of head, tail and sum maximum subarray
+     */
+    static public <T> Optional<Answer<T>> linearJayKadane(T[] differenceArray, BinaryOperator<T> addition, Comparator<T> comparator, T zero) {
+        if (differenceArray.length == 0) {
+            return Optional.empty();
+        }
+        if (differenceArray.length == 1) {
+            return Optional.of(Answer.of(differenceArray[0], 0, 1));
+        }
+        int headIndex = 0, tailIndex = 0;
+        int negativeSumIndex = -1;
+        T maxSum = differenceArray[0];
+        T sum = zero;
+        for (int i = 0; i < differenceArray.length; i++) {
+            sum = addition.apply(sum, differenceArray[i]);
+
+            if (comparator.compare(sum, maxSum) == 1) {
+                maxSum = sum;
+                headIndex = negativeSumIndex + 1;
+                tailIndex = i;
+            }
+
+            if (comparator.compare(sum, zero) == -1) {
+                sum = zero;
+                negativeSumIndex = i;
+            }
+        }
+
+        return Optional.of(Answer.of(maxSum, headIndex, tailIndex));
+    }
+
+    /**
      * Cortege of head index, tail index and sum = A[head] + ... + A[tail]
      * @param <T> type of array elements and respectively sum of elements one
      */
