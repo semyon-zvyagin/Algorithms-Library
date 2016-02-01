@@ -64,11 +64,12 @@ public class AlgorithmReport {
 
         TestingAlgorithmCase[] algorithms = {
                 Algorithms.MatrixMultiplication.simple,
-                Algorithms.MatrixMultiplication.divideAndConquer
+                Algorithms.MatrixMultiplication.divideAndConquer,
+                Algorithms.MatrixMultiplication.strassen
         };
 
-        String html1 = ReportElementsGeneratorHTML.tablePerformance("Matrix Multiplication", 10, x -> x << 1, 5, 100, 16, algorithms);
-        String html2 = ReportElementsGeneratorHTML.tablePerformance("Squared matrix, with edge = 2 ^ n", 16, x -> x << 1, 5, 100, 16, algorithms);
+        String html1 = ReportElementsGeneratorHTML.tablePerformance("Matrix Multiplication", 10, x -> x << 1, 3, 1000, 16, algorithms);
+        String html2 = ReportElementsGeneratorHTML.tablePerformance("<h2>    squared matrix with edge = 2 ^ n</h2>", 16, x -> x << 1, 3, 1000, 16, algorithms);
 
         Element div = document.select("div#matrixMultiplication").first();
         div.html(html1 + html2);

@@ -139,6 +139,7 @@ public class Algorithms {
         static final private Class<Integer> clazz = Integer.class;
         static final private Integer zero = 0;
         static final private BinaryOperator<Integer> addition = (a, b) -> (a + b);
+        static final private BinaryOperator<Integer> subtraction = (a, b) -> (a - b);
         static final private BinaryOperator<Integer> multiplication = (a, b) -> (a * b);
 
         static MultiplicationAlgorithmCase simple =
@@ -154,6 +155,14 @@ public class Algorithms {
                     @Override
                     protected void compute() {
                         C = Multiplication.divideAndConquer(clazz, A, B, zero, addition, multiplication);
+                    }
+                };
+
+        static MultiplicationAlgorithmCase strassen =
+                new MultiplicationAlgorithmCase("Strassen") {
+                    @Override
+                    protected void compute() {
+                        C = Multiplication.strassen(clazz, A, B, zero, addition, subtraction, multiplication);
                     }
                 };
     }

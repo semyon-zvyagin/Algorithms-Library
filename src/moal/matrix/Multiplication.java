@@ -43,6 +43,22 @@ public class Multiplication {
         return C;
     }
 
+    /**
+     * Multiply matrix by using divide and conquer principle.
+     * C(n,m) = A(n,k) * B(k, m)
+     * Complexity for square matrix = O(n^3)
+     * Complexity for arbitrary matrix r = nextPow2(max(n,m,k)), i.e
+     * full complexity = O(r^3) + overhead matrix transformation to square type
+     *
+     * @param clazz          of T type, for creation result matrix
+     * @param A              matrix
+     * @param B              matrix
+     * @param zero           T element, that neutral with respect to addition
+     * @param addition       for addition T elements
+     * @param multiplication for multiplication T elements
+     * @param <T>            type of matrix elements
+     * @return matrix C = A * B
+     */
     public static <T> T[][] divideAndConquer(Class<T> clazz, T[][] A, T[][] B, T zero, BinaryOperator<T> addition, BinaryOperator<T> multiplication) {
         T[][] C = MatrixUtils.createMultiplicationResultMatrix(clazz, A, B);
         Task<T> task = toSquareTask(clazz, A, B, zero);
@@ -51,18 +67,6 @@ public class Multiplication {
 
         MatrixUtils.copyByDestination(result.matrix, C);
         return C;
-    }
-
-    private static <T> Task<T> toSquareTask(Class<T> clazz, T[][] A, T[][] B, T zero) {
-        int maxCountA = Math.max(A.length, A[0].length);
-        int maxCountB = Math.max(B.length, B[0].length);
-        int maxCount = Math.max(maxCountA, maxCountB);
-        int squareCount = MathUtils.nextPow2(maxCount);
-
-        Matrix<T> squareA = Matrix.of(MatrixUtils.toSquareMatrix(clazz, A, zero, squareCount));
-        Matrix<T> squareB = Matrix.of(MatrixUtils.toSquareMatrix(clazz, B, zero, squareCount));
-
-        return Task.of(squareA, squareB);
     }
 
     private static <T> Matrix<T> squareMatrixMultiplyRecursive(Class<T> clazz, Matrix<T> A, Matrix<T> B, BinaryOperator<T> addition, BinaryOperator<T> multiplication) {
@@ -77,26 +81,107 @@ public class Multiplication {
             SquareSeparation<T> separatedB = SquareSeparation.of(B);
             SquareSeparation<T> separatedC = SquareSeparation.of(C);
 
-            separatedC.part11 = Matrix.addition(clazz, addition,
+            separatedC.part11 = Matrix.operation(clazz, addition,
                     squareMatrixMultiplyRecursive(clazz, separatedA.part11, separatedB.part11, addition, multiplication),
                     squareMatrixMultiplyRecursive(clazz, separatedA.part12, separatedB.part21, addition, multiplication));
 
-            separatedC.part12 = Matrix.addition(clazz, addition,
+            separatedC.part12 = Matrix.operation(clazz, addition,
                     squareMatrixMultiplyRecursive(clazz, separatedA.part11, separatedB.part12, addition, multiplication),
                     squareMatrixMultiplyRecursive(clazz, separatedA.part12, separatedB.part22, addition, multiplication));
 
-            separatedC.part21 = Matrix.addition(clazz, addition,
+            separatedC.part21 = Matrix.operation(clazz, addition,
                     squareMatrixMultiplyRecursive(clazz, separatedA.part21, separatedB.part11, addition, multiplication),
                     squareMatrixMultiplyRecursive(clazz, separatedA.part22, separatedB.part21, addition, multiplication));
 
-            separatedC.part22 = Matrix.addition(clazz, addition,
+            separatedC.part22 = Matrix.operation(clazz, addition,
                     squareMatrixMultiplyRecursive(clazz, separatedA.part21, separatedB.part12, addition, multiplication),
                     squareMatrixMultiplyRecursive(clazz, separatedA.part22, separatedB.part22, addition, multiplication));
 
-            separatedC.assigment(C);
+            separatedC.assign(C);
         }
 
         return C;
+    }
+
+    /**
+     * Multiply matrix by using Strassen's Algorithm.
+     * C(n,m) = A(n,k) * B(k, m)
+     * Complexity for square matrix = O(n^lg7)
+     * Complexity for arbitrary matrix r = nextPow2(max(n,m,k)), i.e
+     * full complexity = O(r^lg7) + overhead matrix transformation to square type
+     *
+     * @param clazz          of T type, for creation result matrix
+     * @param A              matrix
+     * @param B              matrix
+     * @param zero           T element, that neutral with respect to addition
+     * @param addition       for addition T elements
+     * @param subtraction    for subtraction T elements
+     * @param multiplication for multiplication T elements
+     * @param <T>            type of matrix elements
+     * @return matrix C = A * B
+     */
+    public static <T> T[][] strassen(Class<T> clazz, T[][] A, T[][] B, T zero, BinaryOperator<T> addition, BinaryOperator<T> subtraction, BinaryOperator<T> multiplication) {
+        T[][] C = MatrixUtils.createMultiplicationResultMatrix(clazz, A, B);
+        Task<T> task = toSquareTask(clazz, A, B, zero);
+
+        Matrix<T> result = strassenMultiplyRecursive(clazz, task.A, task.B, addition, subtraction, multiplication);
+
+        MatrixUtils.copyByDestination(result.matrix, C);
+        return C;
+    }
+
+    private static <T> Matrix<T> strassenMultiplyRecursive(Class<T> clazz, Matrix<T> A, Matrix<T> B, BinaryOperator<T> addition, BinaryOperator<T> subtraction, BinaryOperator<T> multiplication) {
+        int n = A.rowEndIndex - A.rowStartIndex;
+        Matrix<T> C = Matrix.of(MatrixUtils.create(clazz, n, n));
+        if (n == 1) {
+            C.matrix[C.rowStartIndex][C.columnStartIndex] = multiplication.apply(
+                    A.matrix[A.rowStartIndex][A.columnStartIndex],
+                    B.matrix[B.rowStartIndex][B.columnStartIndex]);
+        } else {
+            SquareSeparation<T> separatedA = SquareSeparation.of(A);
+            SquareSeparation<T> separatedB = SquareSeparation.of(B);
+            SquareSeparation<T> separatedC = SquareSeparation.of(C);
+
+            Matrix<T> S1 = Matrix.operation(clazz, subtraction, separatedB.part12, separatedB.part22);
+            Matrix<T> S2 = Matrix.operation(clazz, addition, separatedA.part11, separatedA.part12);
+            Matrix<T> S3 = Matrix.operation(clazz, addition, separatedA.part21, separatedA.part22);
+            Matrix<T> S4 = Matrix.operation(clazz, subtraction, separatedB.part21, separatedB.part11);
+            Matrix<T> S5 = Matrix.operation(clazz, addition, separatedA.part11, separatedA.part22);
+            Matrix<T> S6 = Matrix.operation(clazz, addition, separatedB.part11, separatedB.part22);
+            Matrix<T> S7 = Matrix.operation(clazz, subtraction, separatedA.part12, separatedA.part22);
+            Matrix<T> S8 = Matrix.operation(clazz, addition, separatedB.part21, separatedB.part22);
+            Matrix<T> S9 = Matrix.operation(clazz, subtraction, separatedA.part11, separatedA.part21);
+            Matrix<T> S10 = Matrix.operation(clazz, addition, separatedB.part11, separatedB.part12);
+
+            Matrix<T> P1 = strassenMultiplyRecursive(clazz, separatedA.part11, S1, addition, subtraction, multiplication);
+            Matrix<T> P2 = strassenMultiplyRecursive(clazz, S2, separatedB.part22, addition, subtraction, multiplication);
+            Matrix<T> P3 = strassenMultiplyRecursive(clazz, S3, separatedB.part11, addition, subtraction, multiplication);
+            Matrix<T> P4 = strassenMultiplyRecursive(clazz, separatedA.part22, S4, addition, subtraction, multiplication);
+            Matrix<T> P5 = strassenMultiplyRecursive(clazz, S5, S6, addition, subtraction, multiplication);
+            Matrix<T> P6 = strassenMultiplyRecursive(clazz, S7, S8, addition, subtraction, multiplication);
+            Matrix<T> P7 = strassenMultiplyRecursive(clazz, S9, S10, addition, subtraction, multiplication);
+
+            separatedC.part11 = Matrix.operation(clazz, addition, Matrix.operation(clazz, subtraction, Matrix.operation(clazz, addition, P5, P4), P2), P6);
+            separatedC.part12 = Matrix.operation(clazz, addition, P1, P2);
+            separatedC.part21 = Matrix.operation(clazz, addition, P3, P4);
+            separatedC.part22 = Matrix.operation(clazz, subtraction, Matrix.operation(clazz, subtraction, Matrix.operation(clazz, addition, P5, P1), P3), P7);
+
+            separatedC.assign(C);
+        }
+
+        return C;
+    }
+
+    private static <T> Task<T> toSquareTask(Class<T> clazz, T[][] A, T[][] B, T zero) {
+        int maxCountA = Math.max(A.length, A[0].length);
+        int maxCountB = Math.max(B.length, B[0].length);
+        int maxCount = Math.max(maxCountA, maxCountB);
+        int squareCount = MathUtils.nextPow2(maxCount);
+
+        Matrix<T> squareA = Matrix.of(MatrixUtils.toSquareMatrix(clazz, A, zero, squareCount));
+        Matrix<T> squareB = Matrix.of(MatrixUtils.toSquareMatrix(clazz, B, zero, squareCount));
+
+        return Task.of(squareA, squareB);
     }
 
     private static class Matrix<T> {
@@ -121,7 +206,7 @@ public class Multiplication {
             return new Matrix(matrix, rowStartIndex, rowEndIndex, columnStartIndex, columnEndIndex);
         }
 
-        public static <T> Matrix<T> addition(Class<T> clazz, BinaryOperator<T> addition, Matrix<T> A, Matrix<T> B) {
+        public static <T> Matrix<T> operation(Class<T> clazz, BinaryOperator<T> addition, Matrix<T> A, Matrix<T> B) {
             int rowsCount = A.rowEndIndex - A.rowStartIndex;
             int columnsCount = A.columnEndIndex - A.columnStartIndex;
 
@@ -175,7 +260,7 @@ public class Multiplication {
                     Matrix.of(M.matrix, middleRow, M.rowEndIndex, middleColumn, M.columnEndIndex));
         }
 
-        public void assigment(Matrix<T> C) {
+        public void assign(Matrix<T> C) {
             int halfSize = (C.rowEndIndex - C.columnStartIndex) / 2;
             int middleRow = C.rowStartIndex + halfSize;
             int middleColumn = C.columnStartIndex + halfSize;
