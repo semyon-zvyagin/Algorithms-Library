@@ -16,6 +16,7 @@ public class MultiplicationTest {
 
     BinaryOperator<Integer> addition = (a, b) -> (a + b);
     BinaryOperator<Integer> multiplication = (a, b) -> (b * a);
+    Integer zero = 0;
 
     @Before
     public void setUp() throws Exception {
@@ -36,5 +37,10 @@ public class MultiplicationTest {
     @Test
     public void testSimple() throws Exception {
         C = Multiplication.simple(Integer.class, A, B, addition, multiplication);
+    }
+
+    @Test
+    public void testDivideAndConquer() throws Exception {
+        C = Multiplication.divideAndConquer(Integer.class, A, B, zero, addition, multiplication);
     }
 }
