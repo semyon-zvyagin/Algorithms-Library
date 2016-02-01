@@ -1,4 +1,4 @@
-package moal.report.task.boxing.cases;
+package moal.report.task.boxing.cases.array;
 
 import moal.array.FindTwoElementsTheSumOfWhichEqualsGivenNumber;
 import moal.generator.Generator;

@@ -3,9 +3,11 @@ package moal;
 import moal.array.FindMaximumSubarray;
 import moal.array.FindTwoElementsTheSumOfWhichEqualsGivenNumber;
 import moal.array.Sorting;
-import moal.report.task.boxing.cases.FindMaximumSubArrayAlgorithmCase;
-import moal.report.task.boxing.cases.FindTwoElementsTheSumOfWhichEqualsGivenNumberAlgorithmCase;
-import moal.report.task.boxing.cases.SortingAlgorithmCase;
+import moal.matrix.Multiplication;
+import moal.report.task.boxing.cases.array.FindMaximumSubArrayAlgorithmCase;
+import moal.report.task.boxing.cases.array.FindTwoElementsTheSumOfWhichEqualsGivenNumberAlgorithmCase;
+import moal.report.task.boxing.cases.array.SortingAlgorithmCase;
+import moal.report.task.boxing.cases.matrix.MultiplicationAlgorithmCase;
 import moal.util.ArrayUtils;
 
 import java.util.Comparator;
@@ -129,6 +131,29 @@ public class Algorithms {
                     @Override
                     protected void compute() {
                         FindTwoElementsTheSumOfWhichEqualsGivenNumber.hashSearch(array, searchingSum, subtraction);
+                    }
+                };
+    }
+
+    public static class MatrixMultiplication {
+        static final private Class<Integer> clazz = Integer.class;
+        static final private Integer zero = 0;
+        static final private BinaryOperator<Integer> addition = (a, b) -> (a + b);
+        static final private BinaryOperator<Integer> multiplication = (a, b) -> (a * b);
+
+        static MultiplicationAlgorithmCase simple =
+                new MultiplicationAlgorithmCase("Simple") {
+                    @Override
+                    protected void compute() {
+                        C = Multiplication.simple(clazz, A, B, addition, multiplication);
+                    }
+                };
+
+        static MultiplicationAlgorithmCase divideAndConquer =
+                new MultiplicationAlgorithmCase("Divide and Conquer") {
+                    @Override
+                    protected void compute() {
+                        C = Multiplication.divideAndConquer(clazz, A, B, zero, addition, multiplication);
                     }
                 };
     }

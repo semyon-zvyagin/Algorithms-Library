@@ -60,6 +60,20 @@ public class AlgorithmReport {
         div.html(html);
     }
 
+    public static void refreshMatrixMultiplication(Document document) {
+
+        TestingAlgorithmCase[] algorithms = {
+                Algorithms.MatrixMultiplication.simple,
+                Algorithms.MatrixMultiplication.divideAndConquer
+        };
+
+        String html1 = ReportElementsGeneratorHTML.tablePerformance("Matrix Multiplication", 10, x -> x << 1, 5, 100, 16, algorithms);
+        String html2 = ReportElementsGeneratorHTML.tablePerformance("Squared matrix, with edge = 2 ^ n", 16, x -> x << 1, 5, 100, 16, algorithms);
+
+        Element div = document.select("div#matrixMultiplication").first();
+        div.html(html1 + html2);
+    }
+
     public static void main(String... args) throws Exception {
 
         File file = new File("Algorithms Report.html");
@@ -67,7 +81,8 @@ public class AlgorithmReport {
 
         //refreshArraySorting(document);
         //refreshArrayFindTwoElementsTheSumOfWhichEqualsGivenNumber(document);
-        refreshArrayFindMaxSubarray(document);
+        //refreshArrayFindMaxSubarray(document);
+        refreshMatrixMultiplication(document);
 
         try (PrintWriter writer = new PrintWriter(file, "UTF-8")) {
             writer.print(document.html());

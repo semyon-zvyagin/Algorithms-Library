@@ -43,7 +43,17 @@ public class Multiplication {
         return C;
     }
 
-    private static <T> Task<T> toSquareTask(Class<T> clazz, T[][] A, T[][] B, T[][] C, T zero) {
+    public static <T> T[][] divideAndConquer(Class<T> clazz, T[][] A, T[][] B, T zero, BinaryOperator<T> addition, BinaryOperator<T> multiplication) {
+        T[][] C = MatrixUtils.createMultiplicationResultMatrix(clazz, A, B);
+        Task<T> task = toSquareTask(clazz, A, B, zero);
+
+        Matrix<T> result = squareMatrixMultiplyRecursive(clazz, task.A, task.B, addition, multiplication);
+
+        MatrixUtils.copyByDestination(result.matrix, C);
+        return C;
+    }
+
+    private static <T> Task<T> toSquareTask(Class<T> clazz, T[][] A, T[][] B, T zero) {
         int maxCountA = Math.max(A.length, A[0].length);
         int maxCountB = Math.max(B.length, B[0].length);
         int maxCount = Math.max(maxCountA, maxCountB);
@@ -51,19 +61,8 @@ public class Multiplication {
 
         Matrix<T> squareA = Matrix.of(MatrixUtils.toSquareMatrix(clazz, A, zero, squareCount));
         Matrix<T> squareB = Matrix.of(MatrixUtils.toSquareMatrix(clazz, B, zero, squareCount));
-        Matrix<T> squareC = Matrix.of(MatrixUtils.toSquareMatrix(clazz, C, zero, squareCount));
 
-        return Task.of(squareA, squareB, squareC);
-    }
-
-    public static <T> T[][] divideAndConquer(Class<T> clazz, T[][] A, T[][] B, T zero, BinaryOperator<T> addition, BinaryOperator<T> multiplication) {
-        T[][] C = MatrixUtils.createMultiplicationResultMatrix(clazz, A, B);
-        Task<T> task = toSquareTask(clazz, A, B, C, zero);
-
-        Matrix<T> result = squareMatrixMultiplyRecursive(clazz, task.A, task.B, addition, multiplication);
-
-        MatrixUtils.copyByDestination(result.matrix, C);
-        return C;
+        return Task.of(squareA, squareB);
     }
 
     private static <T> Matrix<T> squareMatrixMultiplyRecursive(Class<T> clazz, Matrix<T> A, Matrix<T> B, BinaryOperator<T> addition, BinaryOperator<T> multiplication) {
@@ -141,17 +140,16 @@ public class Multiplication {
     }
 
     private static class Task<T> {
-        public Matrix<T> A, B, C;
+        public Matrix<T> A, B;
 
-        private Task(Matrix<T> A, Matrix<T> B, Matrix<T> C) {
+        private Task(Matrix<T> A, Matrix<T> B) {
             this.A = A;
             this.B = B;
-            this.C = C;
         }
 
         @SuppressWarnings("unchecked")
-        public static <T> Task<T> of(Matrix<T> A, Matrix<T> B, Matrix<T> C) {
-            return new Task(A, B, C);
+        public static <T> Task<T> of(Matrix<T> A, Matrix<T> B) {
+            return new Task(A, B);
         }
     }
 
