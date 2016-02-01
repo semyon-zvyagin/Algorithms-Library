@@ -15,7 +15,7 @@ public class MultiplicationTest {
     int maxCountStrings = 5;
 
     BinaryOperator<Integer> addition = (a, b) -> (a + b);
-    BinaryOperator<Integer> subtraction = (a, b) -> (a + b);
+    BinaryOperator<Integer> subtraction = (a, b) -> (a - b);
     BinaryOperator<Integer> multiplication = (a, b) -> (b * a);
     Integer zero = 0;
 
