@@ -56,6 +56,12 @@ public class Algorithms {
                 Sorting.mergeWithInsertion(array, comparator, k);
             }
         };
+        static SortingAlgorithmCase heap = new SortingAlgorithmCase("Heap") {
+            @Override
+            protected void compute() {
+                Sorting.heap(array, comparator);
+            }
+        };
     }
 
     public static class ArrayFindMaxSubarray {

@@ -283,6 +283,14 @@ public class Sorting {
         }
     }
 
+    /**
+     * Heap sorting method by using {@link moal.structure.mutable.MaxHeap} structure
+     * Complexity O(n * log(n))
+     *
+     * @param array      of T elements
+     * @param comparator for comparing T elements
+     * @param <T>        type for array and comparator
+     */
     public static <T> void heap(T[] array, Comparator<T> comparator) {
         MaxHeap<T> maxHeap = new MaxHeap<>(array, comparator);
         maxHeap.heapSort();

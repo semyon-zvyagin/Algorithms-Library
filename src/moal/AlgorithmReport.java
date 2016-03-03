@@ -21,7 +21,8 @@ public class AlgorithmReport {
                 Algorithms.ArraySorting.binsertion,
                 Algorithms.ArraySorting.merge,
                 Algorithms.ArraySorting.mergeWithoutInfinity,
-                Algorithms.ArraySorting.mergeWithInsertion
+                Algorithms.ArraySorting.mergeWithInsertion,
+                Algorithms.ArraySorting.heap
         };
 
         String html = ReportElementsGeneratorHTML.tablePerformance("Sorting Array", 100, x -> x << 1, 5, 100, 16, algorithms);
@@ -80,10 +81,10 @@ public class AlgorithmReport {
         File file = new File("Algorithms Report.html");
         Document document = Jsoup.parse(file, "UTF-8");
 
-        //refreshArraySorting(document);
+        refreshArraySorting(document);
         //refreshArrayFindTwoElementsTheSumOfWhichEqualsGivenNumber(document);
         //refreshArrayFindMaxSubarray(document);
-        refreshMatrixMultiplication(document);
+        //refreshMatrixMultiplication(document);
 
         try (PrintWriter writer = new PrintWriter(file, "UTF-8")) {
             writer.print(document.html());

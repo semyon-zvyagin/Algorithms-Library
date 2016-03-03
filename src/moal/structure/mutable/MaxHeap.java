@@ -26,6 +26,11 @@ public class MaxHeap<T> {
         return left(index) + 1;
     }
 
+    /**
+     * Move element on the right place
+     *
+     * @param index of element
+     */
     private void maxHeapify(int index) {
         int left = left(index);
         int right = right(index);
@@ -46,6 +51,10 @@ public class MaxHeap<T> {
         }
     }
 
+    /**
+     * Build MaxHeap structure, starting from parent last element
+     * witch move to right place
+     */
     private void buildMaxHeap() {
         size = array.length;
         for (int i = parent(size - 1); i >= 0; i--) {
