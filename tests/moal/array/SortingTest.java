@@ -46,4 +46,9 @@ public class SortingTest {
     public void testMergeWithInsertion() throws Exception {
         Sorting.mergeWithInsertion(array, comparator, 2);
     }
+
+    @Test
+    public void testHeap() throws Exception {
+        Sorting.heap(array, comparator);
+    }
 }

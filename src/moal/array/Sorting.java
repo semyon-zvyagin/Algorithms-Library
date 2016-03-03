@@ -1,5 +1,6 @@
 package moal.array;
 
+import moal.structure.mutable.MaxHeap;
 import moal.util.ArrayUtils;
 
 import java.util.Arrays;
@@ -280,5 +281,10 @@ public class Sorting {
             j++;
             k++;
         }
+    }
+
+    public static <T> void heap(T[] array, Comparator<T> comparator) {
+        MaxHeap<T> maxHeap = new MaxHeap<>(array, comparator);
+        maxHeap.heapSort();
     }
 }
