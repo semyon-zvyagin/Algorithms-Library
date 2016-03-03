@@ -12,6 +12,7 @@ public class MaxHeap<T> {
     public MaxHeap(T[] array, Comparator<T> comparator) {
         this.array = array;
         this.comparator = comparator;
+        buildMaxHeap();
     }
 
     private static int parent(int index) {
@@ -62,13 +63,40 @@ public class MaxHeap<T> {
         }
     }
 
+    /**
+     * Heap sorting array
+     * Complexity O(n * log(n))
+     *
+     * @return sorted array
+     */
     public T[] heapSort() {
-        buildMaxHeap();
         for (int i = array.length - 1; i > 0; i--) {
             ArrayUtils.swap(array, 0, i);
             size--;
             maxHeapify(0);
         }
         return array;
+    }
+
+    /**
+     * @return maximal element
+     */
+    public T maximum() {
+        return array[0];
+    }
+
+    /**
+     * Extract maximal element from array
+     *
+     * @return maximal element
+     */
+    public T extractMax() {
+        if (size == 0) {
+            return null;
+        }
+        T max = array[0];
+        array[0] = array[--size];
+        maxHeapify(0);
+        return max;
     }
 }

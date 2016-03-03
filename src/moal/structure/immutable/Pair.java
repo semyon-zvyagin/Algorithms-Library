@@ -13,4 +13,9 @@ public class Pair<T, V> {
     public static <T, V> Pair<T, V> of(T A, V B) {
         return new Pair(A, B);
     }
+
+    @Override
+    public String toString() {
+        return String.format("<%s,%s>", A, B);
+    }
 }
