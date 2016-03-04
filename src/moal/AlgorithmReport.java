@@ -22,7 +22,9 @@ public class AlgorithmReport {
                 Algorithms.ArraySorting.merge,
                 Algorithms.ArraySorting.mergeWithoutInfinity,
                 Algorithms.ArraySorting.mergeWithInsertion,
-                Algorithms.ArraySorting.heap
+                Algorithms.ArraySorting.heap,
+                Algorithms.ArraySorting.quick,
+                Algorithms.ArraySorting.quickRandomized
         };
 
         String html = ReportElementsGeneratorHTML.tablePerformance("Sorting Array", 100, x -> x << 1, 5, 100, 16, algorithms);

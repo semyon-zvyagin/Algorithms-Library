@@ -1,5 +1,6 @@
 package moal.array;
 
+import moal.generator.Generator;
 import moal.structure.mutable.MaxHeap;
 import moal.util.ArrayUtils;
 
@@ -294,5 +295,108 @@ public class Sorting {
     public static <T> void heap(T[] array, Comparator<T> comparator) {
         MaxHeap<T> maxHeap = new MaxHeap<>(array, comparator);
         maxHeap.heapSort();
+    }
+
+    /**
+     * @param array      of T elements
+     * @param comparator for comparing T elements
+     * @param <T>        type of array and comparator
+     * @see <a href="https://en.wikipedia.org/wiki/Quicksort">Quick sorting</a> algorithm
+     * Complexity O(n * log(n))
+     */
+    public static <T> void quick(T[] array, Comparator<T> comparator) {
+        quick(array, 0, array.length - 1, comparator);
+    }
+
+    /**
+     * Recursive method, that choose delimiter element, divides the array into two parts and
+     * call itself on each part.
+     * Complexity O(n * log(n))
+     *
+     * @param array      of T elements
+     * @param p          index from (inclusive) will partition on two parts
+     * @param r          index to (inclusive) will partition on two parts
+     * @param comparator for comparing T elements
+     * @param <T>        type of array and comparator
+     */
+    private static <T> void quick(T[] array, int p, int r, Comparator<T> comparator) {
+        if (p < r) {
+            int q = partition(array, p, r, comparator);
+            quick(array, p, q - 1, comparator);
+            quick(array, q + 1, r, comparator);
+        }
+    }
+
+    /**
+     * Selects the delimiting element with r index. Then puts less then delimiter elements
+     * on the left of delimiter, and more then delimiter on the right.
+     * Complexity O(n)
+     *
+     * @param array      of T elements
+     * @param p          index from (inclusive) will partition on two parts
+     * @param r          index to (inclusive) will partition on two parts
+     * @param comparator for comparing T elements
+     * @param <T>        type of elements
+     * @return index of delimiter
+     */
+    private static <T> int partition(T[] array, int p, int r, Comparator<T> comparator) {
+        T delimiter = array[r];
+        int i = p - 1;
+        for (int j = p; j < r; j++) {
+            if (comparator.compare(array[j], delimiter) != 1) {
+                ArrayUtils.swap(array, ++i, j);
+            }
+        }
+        ArrayUtils.swap(array, ++i, r);
+        return i;
+    }
+
+    /**
+     * Selects the delimiting element with random index. Then swap with element with r index.
+     * Then call {@link #partition(Object[], int, int, Comparator)} method
+     * Complexity O(n)
+     *
+     * @param array      of T elements
+     * @param p          index from (inclusive) will partition on two parts
+     * @param r          index to (inclusive) will partition on two parts
+     * @param comparator for comparing T elements
+     * @param <T>        type of elements
+     * @return index of delimiter
+     */
+    private static <T> int partitionRandomized(T[] array, int p, int r, Comparator<T> comparator) {
+        int randomDelimiterIndex = Generator.getRandomInteger(p, r + 1);
+        ArrayUtils.swap(array, r, randomDelimiterIndex);
+        return partition(array, p, r, comparator);
+    }
+
+    /**
+     * Recursive method, that choose delimiter element, divides the array into two parts and
+     * call itself on each part.
+     * Complexity O(n * log(n))
+     *
+     * @param array      of T elements
+     * @param p          index from (inclusive) will partition on two parts
+     * @param r          index to (inclusive) will partition on two parts
+     * @param comparator for comparing T elements
+     * @param <T>        type of array and comparator
+     */
+    private static <T> void quickRandomized(T[] array, int p, int r, Comparator<T> comparator) {
+        if (p < r) {
+            int q = partitionRandomized(array, p, r, comparator);
+            quickRandomized(array, p, q - 1, comparator);
+            quickRandomized(array, q + 1, r, comparator);
+        }
+    }
+
+    /**
+     * @param array      of T elements
+     * @param comparator for comparing T elements
+     * @param <T>        type of array and comparator
+     * @see <a href="https://en.wikipedia.org/wiki/Quicksort">Quick sorting</a> algorithm with
+     * randomized delimiter element to become independent of the input data
+     * Complexity O(n * log(n))
+     */
+    public static <T> void quickRandomized(T[] array, Comparator<T> comparator) {
+        quickRandomized(array, 0, array.length - 1, comparator);
     }
 }

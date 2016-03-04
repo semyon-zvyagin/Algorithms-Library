@@ -51,4 +51,14 @@ public class SortingTest {
     public void testHeap() throws Exception {
         Sorting.heap(array, comparator);
     }
+
+    @Test
+    public void testQuick() throws Exception {
+        Sorting.quick(array, comparator);
+    }
+
+    @Test
+    public void testQuickRandomized() throws Exception {
+        Sorting.quickRandomized(array, comparator);
+    }
 }

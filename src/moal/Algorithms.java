@@ -62,6 +62,18 @@ public class Algorithms {
                 Sorting.heap(array, comparator);
             }
         };
+        static SortingAlgorithmCase quick = new SortingAlgorithmCase("Quick") {
+            @Override
+            protected void compute() {
+                Sorting.quick(array, comparator);
+            }
+        };
+        static SortingAlgorithmCase quickRandomized = new SortingAlgorithmCase("Quick Randomized") {
+            @Override
+            protected void compute() {
+                Sorting.quickRandomized(array, comparator);
+            }
+        };
     }
 
     public static class ArrayFindMaxSubarray {
