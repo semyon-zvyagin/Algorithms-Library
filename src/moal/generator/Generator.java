@@ -1,17 +1,29 @@
 package moal.generator;
 
+import com.sun.xml.internal.ws.util.StringUtils;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  * Need for simple generate some structure
  */
 public class Generator {
 
+    private static final char[] vowels = {'a','e','i','o','u'};
+    private static final char[] consonants = {'b','c','d','f','g','h','j','k','l','m','n','p','q','r','s','t','v','w','x','y','z'};
     private static Random random = new Random(System.currentTimeMillis());
+    public static Predicate<Double> isHappened = (x) -> (x >= random.nextDouble());
+    public static Supplier<Character> randomVowelSupplier = () -> (vowels[getRandomInteger(0, vowels.length)]);
+    public static Supplier<Character> randomConsonantSupplier = () -> (consonants[getRandomInteger(0, consonants.length)]);
+    private static double probabilityFirstConsonant = 0.7;
+    private static double probabilitySecondConsonant = 0.4;
 
     /**
      * Generate random integer between two numbers.
@@ -68,5 +80,34 @@ public class Generator {
         }
 
         return result;
+    }
+
+    /**
+     * Return syllable like (v1,v2,v3) where
+     * v1 is random consonant witch probability appear is {@link #probabilityFirstConsonant}
+     * v2 is random vowels witch always appear
+     * v1 is random consonant witch probability appear is {@link #probabilitySecondConsonant}
+     * @return random syllable
+     */
+    public static String getRandomSyllable() {
+        return  (isHappened.test(probabilityFirstConsonant) ? randomConsonantSupplier.get().toString() : "") +
+                    randomVowelSupplier.get() +
+                (isHappened.test(probabilitySecondConsonant) ? randomConsonantSupplier.get().toString() : "");
+    }
+
+    /**
+     * Generate random name which contains at least two syllables
+     * and average contains {@code averageNumberOfSyllables}
+     *
+     * @param averageNumberOfSyllables - average count of syllables in generated name
+     * @return random name
+     */
+    public static String getRandomName(int averageNumberOfSyllables) {
+        int countOfSyllables = (int)Math.round(averageNumberOfSyllables * (1 + random.nextGaussian()));
+        if (countOfSyllables < 2) {
+            countOfSyllables = 2;
+        }
+        String name = Stream.generate(Generator::getRandomSyllable).limit(countOfSyllables).collect(Collectors.joining());
+        return StringUtils.capitalize(name);
     }
 }
