@@ -5,6 +5,8 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.function.IntFunction;
+import java.util.function.ToIntFunction;
 
 public class SortingTest {
 
@@ -12,6 +14,8 @@ public class SortingTest {
     int size = 10;
     Comparator<Integer> comparator = (x, y) -> (Integer.compare(x, y));
     Integer infinity = Integer.MAX_VALUE;
+    IntFunction<Integer[]> generator = Integer[]::new;
+    ToIntFunction<Integer> key = Integer::intValue;
 
     @org.junit.Before
     public void setUp() throws Exception {
@@ -60,5 +64,10 @@ public class SortingTest {
     @Test
     public void testQuickRandomized() throws Exception {
         Sorting.quickRandomized(array, comparator);
+    }
+
+    @Test
+    public void testCounting() throws Exception {
+        array = Sorting.counting(array, generator, key, size);
     }
 }

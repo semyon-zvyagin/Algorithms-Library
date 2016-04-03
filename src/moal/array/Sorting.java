@@ -6,6 +6,8 @@ import moal.util.ArrayUtils;
 
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.function.IntFunction;
+import java.util.function.ToIntFunction;
 
 /**
  * Class with static methods for sorting array
@@ -398,5 +400,26 @@ public class Sorting {
      */
     public static <T> void quickRandomized(T[] array, Comparator<T> comparator) {
         quickRandomized(array, 0, array.length - 1, comparator);
+    }
+
+    public static <T> T[] counting(T[] array, IntFunction<T[]> generator, ToIntFunction<T> key, int border) {
+        int[] counter = new int[++border];
+
+        for (T element : array) {
+            counter[key.applyAsInt(element)]++;
+        }
+
+        for (int k = 1; k < border; k++) {
+            counter[k] += counter[k - 1];
+        }
+
+        T[] sorted = generator.apply(array.length);
+        for (int i = array.length - 1; i >= 0; i--) {
+            int k = key.applyAsInt(array[i]);
+            sorted[counter[k] - 1] = array[i];
+            counter[k]--;
+        }
+
+        return sorted;
     }
 }
