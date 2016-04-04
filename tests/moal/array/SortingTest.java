@@ -1,6 +1,7 @@
 package moal.array;
 
 import moal.generator.Generator;
+import moal.generator.entity.Person;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -10,16 +11,17 @@ import java.util.function.ToIntFunction;
 
 public class SortingTest {
 
-    Integer[] array;
+    Person[] array;
     int size = 10;
-    Comparator<Integer> comparator = (x, y) -> (Integer.compare(x, y));
-    Integer infinity = Integer.MAX_VALUE;
-    IntFunction<Integer[]> generator = Integer[]::new;
-    ToIntFunction<Integer> key = Integer::intValue;
+    Comparator<Person> comparator = (x, y) -> (Integer.compare(x.getId(), y.getId()));
+    Person infinity = new Person(Integer.MAX_VALUE, "Infinity");
+    IntFunction<Person[]> generator = Person[]::new;
+    ToIntFunction<Person> key = Person::getId;
 
     @org.junit.Before
     public void setUp() throws Exception {
-        array = Generator.getRandomIntegerArray(size, size);
+        array = Generator.getRandomPersonArray(size);
+        Shuffle.inPlace(array);
         System.out.println(Arrays.toString(array));
     }
 

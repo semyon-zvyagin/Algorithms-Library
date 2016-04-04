@@ -1,6 +1,7 @@
 package moal.generator;
 
 import com.sun.xml.internal.ws.util.StringUtils;
+import moal.generator.entity.Person;
 
 import java.util.Collections;
 import java.util.List;
@@ -18,6 +19,7 @@ public class Generator {
 
     private static final char[] vowels = {'a','e','i','o','u'};
     private static final char[] consonants = {'b','c','d','f','g','h','j','k','l','m','n','p','q','r','s','t','v','w','x','y','z'};
+    private static final int defaultAverageNumberOfSyllables = 2;
     private static Random random = new Random(System.currentTimeMillis());
     public static Predicate<Double> isHappened = (x) -> (x >= random.nextDouble());
     public static Supplier<Character> randomVowelSupplier = () -> (vowels[getRandomInteger(0, vowels.length)]);
@@ -97,6 +99,16 @@ public class Generator {
 
     /**
      * Generate random name which contains at least two syllables
+     * and average contains {@link #defaultAverageNumberOfSyllables}
+     *
+     * @return random name
+     */
+    public static String getRandomName() {
+        return getRandomName(defaultAverageNumberOfSyllables);
+    }
+
+    /**
+     * Generate random name which contains at least two syllables
      * and average contains {@code averageNumberOfSyllables}
      *
      * @param averageNumberOfSyllables - average count of syllables in generated name
@@ -109,5 +121,15 @@ public class Generator {
         }
         String name = Stream.generate(Generator::getRandomSyllable).limit(countOfSyllables).collect(Collectors.joining());
         return StringUtils.capitalize(name);
+    }
+
+    /**
+     * Generate array with random {@link Person}s
+     *
+     * @param count of persons in array
+     * @return random array of persons
+     */
+    public static Person[] getRandomPersonArray(int count) {
+        return Stream.generate(Person::getRandom).limit(count).toArray(Person[]::new);
     }
 }
