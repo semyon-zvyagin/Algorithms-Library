@@ -12,7 +12,7 @@ import java.util.function.ToIntFunction;
 public class SortingTest {
 
     Person[] array;
-    int size = 10;
+    int size = 0xfff;
     Comparator<Person> comparator = (x, y) -> (Integer.compare(x.getId(), y.getId()));
     Person infinity = new Person(Integer.MAX_VALUE, "Infinity");
     IntFunction<Person[]> generator = Person[]::new;
@@ -71,5 +71,10 @@ public class SortingTest {
     @Test
     public void testCounting() throws Exception {
         array = Sorting.counting(array, generator, key, size);
+    }
+
+    @Test
+    public void testRadix() throws Exception {
+        array = Sorting.radix(array, generator, key, size);
     }
 }

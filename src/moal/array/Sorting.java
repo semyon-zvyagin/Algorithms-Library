@@ -422,4 +422,14 @@ public class Sorting {
 
         return sorted;
     }
+
+    public static <T> T[] radix(T[] array, IntFunction<T[]> generator, ToIntFunction<T> key, int border) {
+
+        array = counting(array, generator, x -> key.applyAsInt(x) & 0xff, 0xff);
+        array = counting(array, generator, x -> (key.applyAsInt(x) >>> 8) & 0xff, 0xff);
+        array = counting(array, generator, x -> (key.applyAsInt(x) >>> 16) & 0xff, 0xff);
+        array = counting(array, generator, x -> (key.applyAsInt(x) >>> 24) & 0xff, 0xff);
+
+        return array;
+    }
 }
